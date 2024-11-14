@@ -52,3 +52,56 @@ The operating system keeps several processes in memory simultaneously
 ![memory management](./Assets/image_4.png)
 
 In addition, if several processes are ready to run at the same time, the system must choose which process will run next. Making this decision is `CPU scheduling`
+
+
+`Protection`, then, is any mechanism for controlling the access of processes
+or users to the resources defined by a computer system.
+
+It is the job of `security` to defend a system from external and internal attacks. 
+- Prevention of some of these attacks is considered an operating-system function on some systems, while other systems leave it to policy or additional software.
+
+`Protection and security` require the system to be able to distinguish among all its users. Most operating systems maintain a list of user names and associated user identifiers (user IDs)
+- group identifiers
+- escalate privileges
+
+Kernel Data Structures
+
+Lists, Stacks, and Queues:
+- In a singly linked list, each item points to its successor
+![singly linked list](./Assets/image_8.png)
+
+- In a doubly linked list, a given item can refer either to its predecessor orto its successor
+![doubly linked list](./Assets/image_9.png)
+
+- In a circularly linked list, the last element in the list refers to the first element, rather than to null.
+![circularly linked list](./Assets/image_10.png)
+
+A stack is a sequentially ordered data structure that uses the last in, first
+out ( LIFO) principle for adding and removing items, meaning that the last item
+placed onto a stack is the first item removed
+
+A queue, in contrast, is a sequentially ordered data structure that uses the
+first in, first out (FIFO) principle: items are removed from a queue in the order
+in which they were inserted.
+
+Trees:
+- general tree
+- binary tree
+- binary search tree
+
+Hash Functions and Maps
+
+Bitmaps
+
+Computing Environments
+- Traditional Computing
+- Mobile Computing
+- Distributed Systems
+- Client – Server Computing
+- Peer-to-Peer Computing
+- Virtualized Computing
+- Cloud Computing
+- Real-Time Embedded Systems
+
+
+Virtualization: Virtualization is a technology that allows operating systems to run as applications within other operating systems.

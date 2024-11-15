@@ -7,9 +7,8 @@ Author: Abraham Silberschatz, Peter Baer Galvin, Greg Gagne
 
 # Concept:
 
-- Operating systems exist because they offer a reasonable way to solve the problem of creating a usable computing system. 
+`Operating systems` exist because they offer a reasonable way to solve the problem of creating a usable computing system. 
 The fundamental goal of computer systems is to execute programs and to make solving user problems easier. Computer hardware is constructed toward this goal. Since bare hardware alone is not particularly easy to use, application programs are developed. These programs require certain common operations, such as those controlling the I/O devices. The common functions of controlling and allocating resources are then brought together into one piece of software: the operating system.
-
 
 - System bus:
   - Address bus: to determine where it should be sent or read from
@@ -43,15 +42,76 @@ Operating-System Operations
 Powered up or rebooted -> bootstrap program run -> the bootstrap program must locate the operating-system kernel and load it into memory -> the kernel is loaded and executing -> Some services are provided outside of the kernel by system programs that are loaded into memory at boot time to become `system daemons`, which run the entire time the kernel is running. -> the system is fully booted, and the system waits for some event to occur.
 
 
-System call - is a mechanism that allows a user program to request a service from the operating system. ~  system call may generate a special kind of interrupt to switch from user mode to kernel mode
+`System call` - is a mechanism that allows a user program to request a service from the operating system. ~  system call may generate a special kind of interrupt to switch from user mode to kernel mode
 
-In a multiprogrammed system, a program in execution is termed a process.
+In a multiprogramming system, a program in execution is termed a process.
 Multitasking is a logical extension of multiprogramming. In multitasking systems, the CPU executes multiple processes by switching among them, but the switches occur frequently, providing the user with a fast response time.
 
 The operating system keeps several processes in memory simultaneously
 ![memory management](./Assets/image_4.png)
 
 In addition, if several processes are ready to run at the same time, the system must choose which process will run next. Making this decision is `CPU scheduling`
+
+In order to ensure the proper execution of the system, we must be able to distinguish between the execution of operating-system code and user-defined code
+- user mode
+- kernel mode (also called supervisor mode, system mode, or privileged mode)
+
+A bit, called the `mode bit`, is added to the hardware of the computer to indicate the current mode: kernel (0) or user (1)
+
+![Transition from user to kernel mode](./Assets/image_5.png)
+
+There can be more than 2 modes:
+- Intel processors have four separate protection rings
+- ARMv8 systems have seven modes
+- CPUs that support virtualization (Section 18.1) frequently have a separate mode to indicate when the virtual machine manager (VMM) is in control of the system.
+
+The operating system is responsible for the following activities in connection with process management:
+- Creating and deleting both user and system processes
+- Scheduling processes and threads on the CPUs
+- Suspending and resuming processes
+- Providing mechanisms for process synchronization
+- Providing mechanisms for process communication
+
+The operating system is responsible for the following activities in connection with memory management:
+- Keeping track of which parts of memory are currently being used and which process is using them
+- Allocating and de-allocating memory space as needed
+- Deciding which processes (or parts of processes) and data to move into and out of memory
+
+The operating system is responsible for the following activities in connection with file management:
+- Creating and deleting files
+- Creating and deleting directories to organize files
+- Supporting primitives for manipulating files and directories
+- Mapping files onto mass storage
+- Backing up files on stable (nonvolatile) storage media
+
+The operating system is responsible for the following activities in connection with secondary storage management:
+- Mounting and unmounting
+- Free-space management
+- Storage allocation
+- Disk scheduling
+- Partitioning
+- Protection
+
+Cache management
+
+Information, As it is used, it is copied into a faster storage system, from disk to memory to cache. 
+- Then when the information change, it must update back from cache -> memory -> disk.
+
+In a computing environment where only one process executes at a time, this arrangement poses no difficulties, 
+-  However, in a multitasking environment, where the CPU is switched back and forth among various processes, extreme care must be taken to ensure that, if several processes wish to access A, then each of these processes will obtain the most recently updated value of A.
+-  The situation becomes more complicated in a multiprocessor environment where, in addition to maintaining internal registers, each of the CPUs also contains a local cache. In such an environment, a copy of A may exist simultaneously in several caches.
+   -  Cache Coherency
+-  In a distributed environment, the situation becomes even more complex. In this environment, several copies (or replicas) of the same file can be kept on different computers
+
+
+The I/O subsystem consists of several components:
+- A memory-management component that includes buffering, caching, and
+spooling
+- A general device-driver interface
+- Drivers for specific hardware devices
+
+A device driver is a specialized software program that allows the operating system (OS) and applications to interact with hardware devices, such as printers, graphics cards, storage devices, network interfaces, and more.
+- `driverquery` list all driver on Windows
 
 
 `Protection`, then, is any mechanism for controlling the access of processes
@@ -102,6 +162,5 @@ Computing Environments
 - Virtualized Computing
 - Cloud Computing
 - Real-Time Embedded Systems
-
 
 Virtualization: Virtualization is a technology that allows operating systems to run as applications within other operating systems.

@@ -63,7 +63,7 @@ A bit, called the `mode bit`, is added to the hardware of the computer to indica
 There can be more than 2 modes:
 - Intel processors have four separate protection rings
 - ARMv8 systems have seven modes
-- CPUs that support virtualization (Section 18.1) frequently have a separate mode to indicate when the virtual machine manager (VMM) is in control of the system.
+- CPUs that support virtualization frequently have a separate mode to indicate when the virtual machine manager (VMM) is in control of the system.
 
 The operating system is responsible for the following activities in connection with process management:
 - Creating and deleting both user and system processes
@@ -164,3 +164,16 @@ Computing Environments
 - Real-Time Embedded Systems
 
 Virtualization: Virtualization is a technology that allows operating systems to run as applications within other operating systems.
+
+- `Public cloud` —a cloud available via the Internet to anyone willing to pay
+for the services
+- `Private cloud` —a cloud run by a company for that company’s own use
+- `Hybrid cloud` —a cloud that includes both public and private cloud
+components
+- Software as a service (`SaaS`)—one or more applications (such as word
+processors or spreadsheets) available via the Internet
+- Platform as a service (`PaaS`)—a software stack ready for application use
+via the Internet (for example, a database server)
+- Infrastructure as a service (`IaaS`)—servers or storage available over the
+Internet (for example, storage available for making backup copies of
+production data)

@@ -177,3 +177,48 @@ via the Internet (for example, a database server)
 - Infrastructure as a service (`IaaS`)—servers or storage available over the
 Internet (for example, storage available for making backup copies of
 production data)
+
+# Chapter 2
+
+![Basic OS](./Assets/image_11.png)
+
+**User-Oriented Services:**
+
+User Interface (UI): Provides ways to interact with the system:
+    - Command-Line Interface (CLI): Text-based commands.
+    - Batch Interface: Commands stored in files for execution.
+    - Graphical User Interface (GUI): Visual interface with windows, menus, and input devices.
+
+Program Execution:
+    - Loads programs into memory, runs them, and manages normal or abnormal termination.
+
+I/O Operations:
+    - Handles input and output through files or devices, ensuring efficient and protected operations.
+
+File-System Manipulation:
+    - Provides functions to read, write, create, delete, and manage files and directories, including permissions and support for various file systems.
+
+Communication:
+    - Facilitates data exchange between processes using shared memory or message passing, either locally or over a network.
+
+Error Detection:
+    - Identifies and manages errors in hardware, devices, or software, taking actions like process termination or error reporting to maintain consistency.
+
+**System-Oriented Services:**
+
+Resource Allocation:
+    - Distributes CPU, memory, storage, and I/O devices among multiple users or processes for efficient operation.
+
+Accounting:
+    - Tracks resource usage for billing, system optimization, and statistical analysis.
+
+Protection and Security:
+    - Controls access to system resources and safeguards against interference or unauthorized access through authentication and security mechanisms.
+
+System calls can be grouped roughly into six major categories: 
+- Process control
+- File manipulation 
+- Device manipulation 
+- Information maintenance
+- Communications 
+- Protection.

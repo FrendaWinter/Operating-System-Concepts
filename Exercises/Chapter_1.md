@@ -13,6 +13,10 @@ The three main purposes of an operating system are:
 
 #### 1.2. We have stressed the need for an operating system to make efficient use of the computing hardware. When is it appropriate for the operating system to forsake this principle and to “waste” resources? Why is such a system not really wasteful?
 
+- **Enhance reliability and security:** Duplicating data and using more computing power for security purposes may seems resources heavy but this is crucial for the GOV systems or infrastructure systems
+
+- **Support virtualization:** Virtual machines and containerized environment use additional resources to emulate hardware or isolate processes, but provide flexibility, and isolation for specific purposes, like testing or malware analysis
+
 --- 
 
 #### 1.3. What is the main difficulty that a programmer must overcome in writing an operating system for a real-time environment?
@@ -75,9 +79,21 @@ Access I/O device
 
 #### 1.7. Some CPUs provide for more than two modes of operation. What are two possible uses of these multiple modes?
 
-- Intel processors have four separate protection rings
-- ARMv8 systems have seven modes
-- CPUs that support virtualization frequently have a separate mode to indicate when the virtual machine manager (VMM) is in control of the system.
+**Why need more than two mode:**
+
+- Flexibility in Operations: Multiple modes indeed provide flexibility for the operating system to assign specific permissions and control over different types of operations.
+- Enhanced Security: Multiple modes contribute to improved security by allowing finer-grained control over access rights and privileges, limiting the scope of potential vulnerabilitie    
+
+**Example of Protection**:
+Rings (Intel Processors):
+- Ring 0 (kernel mode) has the highest privileges and can execute all instructions.
+- Ring 3 (user mode) is restricted and typically used for applications. Rings 1 and 2 can be used for intermediate privilege levels, though they are rarely utilized in modern OSes.
+
+ARMv8 Modes:
+- ARMv8 provides modes like EL0 (user applications), EL1 (OS kernel), EL2 (hypervisor), and EL3 (secure monitor). This architecture supports features like trusted execution environments (e.g., ARM TrustZone) to isolate sensitive operations.
+
+Virtualization-Specific Modes:
+- Virtualization-capable CPUs introduce modes like VMX root mode (Intel) or EL2 (ARMv8) for the VMM, ensuring guest operating systems cannot directly access hardware without going through the VMM.
 
 ---
 
@@ -153,9 +169,7 @@ Magnetic tapes -> Optical disk -> Hard-disk drives -> Nonvolatile memory -> Main
 
 ---
 
-#### 1.20 Consider an SMP system similar to the one shown in Figure 1.8. Illustrate
-with an example how data residing in memory could in fact have a
-different value in each of the local caches.
+#### 1.20 Consider an SMP system similar to the one shown in Figure 1.8. Illustrate with an example how data residing in memory could in fact have a different value in each of the local caches.
 
 ---
 
@@ -174,6 +188,9 @@ c. Distributed systems
 a. A campus student union
 b. Several campus locations across a statewide university system
 c. A neighborhood
+
+LAN: a and c
+WAN: b
 
 ---
 
@@ -196,3 +213,8 @@ c. A neighborhood
 ---
 
 #### 1.27 Identify several advantages and several disadvantages of open-source operating systems. Identify the types of people who would find each aspect to be an advantage or a disadvantage.
+
+open-source OS provide powerfull developing environment and free tools, suite for computer scienctist, programmer and technology lover
+
+But the common user maybe not be an advantage for open-source OS, they need friendly user interface app, some office app and file systems that easy to use.
+

@@ -222,3 +222,36 @@ System calls can be grouped roughly into six major categories:
 - Information maintenance
 - Communications 
 - Protection.
+
+Process control
+- end, abort
+- load, execute
+- create process, terminate process
+- get process attributes, set process attributes
+- wait for time
+- wait event, signal event
+- allocate and free memory
+
+File management
+- create file, delete file
+- open, close
+- read, write, reposition
+- get file attributes, set file attributes
+
+Device management
+- request device, release device
+- read, write, reposition
+- get device attributes, set device attributes
+- logically attach or detach devices
+
+Information maintenance
+- get time or date, set time or date
+- get system data, set system data
+- get process, file, or device attributes
+- set process, file, or device attributes
+
+Communications
+- create, delete communication connection
+- send, receive messages
+- transfer status information
+- attach or detach remote devices

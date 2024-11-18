@@ -82,7 +82,7 @@ Access I/O device
 **Why need more than two mode:**
 
 - Flexibility in Operations: Multiple modes indeed provide flexibility for the operating system to assign specific permissions and control over different types of operations.
-- Enhanced Security: Multiple modes contribute to improved security by allowing finer-grained control over access rights and privileges, limiting the scope of potential vulnerabilitie    
+- Enhanced Security: Multiple modes contribute to improved security by allowing finer-grained control over access rights and privileges, limiting the scope of potential vulnerability    
 
 **Example of Protection**:
 Rings (Intel Processors):
@@ -145,6 +145,9 @@ c. The CPU is allowed to execute other programs while the DMA
 controller is transferring data. Does this process interfere with
 the execution of the user programs? If so, describe what forms of
 interference are caused.
+
+---
+
 #### 1.17 Some computer systems do not provide a privileged mode of operation in hardware. Is it possible to construct a secure operating system for these computer systems? Give arguments both that it is and that it is not possible.
 
 ---

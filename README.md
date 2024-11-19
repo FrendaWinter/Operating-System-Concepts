@@ -255,3 +255,8 @@ Communications
 - send, receive messages
 - transfer status information
 - attach or detach remote devices
+
+
+Communication
+- message-passing model
+- shared-memory model

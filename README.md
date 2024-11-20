@@ -288,3 +288,46 @@ Categories:
 - Background services.
 
 Along with system programs, most operating systems are supplied with programs that are useful in solving common problems or performing common operations. Such application programs include Web browsers, word processors and text formatters, spreadsheets, database systems, compilers, plotting and statistical-analysis packages, and games.
+
+### Design Goals
+
+user goals
+system goals
+
+Mechanisms and Policies
+
+One important principle is the separation of policy from mechanism. 
+Mechanisms determine how to do something; policies determine what will be done.
+
+For example, the timer construct is a mechanism for ensuring CPU protection, 
+but deciding how long the timer is to be set for a particular user is a policy decision.
+
+## Operating-System Structure
+
+#### Layered Approach: 
+
+Which the operating system is broken into a number of layers (levels). The bottom layer (layer 0) is the hardware; the highest (layer N) is the user interface.
+
+**Advantages:**
+- Simplicity of construction and debugging.
+
+**Disadvantages:**
+- Because a layer can use only lower-level layers, careful planning is necessary.
+- They tend to be less efficient than other types. For instance, when a user program executes an I/O operation, it executes a system call that is trapped to the I/O layer, which calls the memory-management layer, which in turn calls the CPU-scheduling layer, which is then passed to the hardware. At each layer, the parameters may be modified, data may need to be passed, and so on. Each layer adds overhead to the system call.
+
+#### Microkernels: 
+
+#### Modules: 
+
+Loadable kernel modules. Here, the kernel has a set of core components and links in additional services via modules
+
+![Solaris loadable modules](./Assets/image_12.png)
+
+
+#### Hybrid Systems
+
+In practice, very few operating systems adopt a single, strictly defined structure. Instead, they combine different structure.
+
+### Operating-System Debugging
+
+![Kernighan’s Law](./Assets/image_13.png)

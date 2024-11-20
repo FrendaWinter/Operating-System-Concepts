@@ -94,6 +94,9 @@ For large operating systems (including most general-purpose operating systems li
 
 #### 2.12 The services and functions provided by an operating system can be divided into two main categories. Briefly describe the two categories, and discuss how they differ.
 
+- policy - what will be done
+- mechanism - how to do something
+
 ---
 
 #### 2.13 Describe three general methods for passing parameters to the operating system.
@@ -147,6 +150,8 @@ Disadvantages of Using Same System Call Interface
 
 #### 2.17 Would it be possible for the user to develop a new command interpreter using the system-call interface provided by the operating system?
 
+Yes
+
 ---
 
 #### 2.18 What are the two models of inter-process communication? What are the strengths and weaknesses of the two approaches?
@@ -154,6 +159,10 @@ Disadvantages of Using Same System Call Interface
 ---
 
 #### 2.19 Why is the separation of mechanism and policy desirable?
+The separation of policy and mechanism is important for flexibility.
+
+- Policies are likely to change across places or over time.
+- On other hand, mechanisms should be stable and well-defined. Changing mechanisms is require re-designing, re-structuring, and re-coding of related parts of the system.
 
 ---
 
@@ -161,9 +170,16 @@ Disadvantages of Using Same System Call Interface
 
 ---
 
-#### 2.21 What is the main advantage of the micro- kernel approach to system design? How do user programs and system services interact in a micro-kernel architecture? What are the disadvantages of using the micro-kernel approach?
+#### 2.21 What is the main advantage of the micro-kernel approach to system design? How do user programs and system services interact in a micro-kernel architecture? What are the disadvantages of using the micro-kernel approach?
+
+---
 
 #### 2.22 What are the advantages of using loadable kernel modules?
+
+
+Programming Problems:
+
+![Programming Problems](../Assets/e_2.26.png)
 
 Part II Assignment
 In the module entry point, create a linked list containing five struct birthday elements. Traverse the linked list and output its contents to the kernel log buffer.

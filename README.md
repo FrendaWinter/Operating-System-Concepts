@@ -260,3 +260,31 @@ Communications
 Communication
 - message-passing model
 - shared-memory model
+
+**Message-passing model:**
+- First, processes establish the connection
+  - Each process identify by host name, process name 
+  - OS provide system call for this, like: `get hostid()` `get processid()` `open connection()` ` close connection()` `wait for connection()`
+- The source of the communication, known as the `client`, and the receiving daemon, known as a `server`
+- Exchange messages by using `read_message()` and `write_message()` system calls
+- The `close_connection()` call terminates the communication.
+
+**Shared-memory model:** 
+- The processes use `shared_memory_create()` and `shared_memory_attach()` system calls to create and gain access to regions of memory owned by other processes
+- Shared memory requires that two or more processes agree to remove restriction '
+    - The operating system usually tries to prevent one process from accessing another process’s memory
+
+Message passing is useful for exchanging smaller amounts of data, because no conflicts need be avoided. It is also easier to implement than is shared memory for inter-computer communication. Shared memory allows maximum speed and convenience of communication, since it can be done at memory transfer speeds when it takes place within a computer.
+
+### System Programs
+
+Categories:
+- File management.
+- Status information.
+- File modification.
+- Programming-language support.
+- Program loading and execution.
+- Communications.
+- Background services.
+
+Along with system programs, most operating systems are supplied with programs that are useful in solving common problems or performing common operations. Such application programs include Web browsers, word processors and text formatters, spreadsheets, database systems, compilers, plotting and statistical-analysis packages, and games.

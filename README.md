@@ -439,3 +439,53 @@ Some operating systems, such as time-sharing systems, may introduce an intermedi
 - This scheme is called swapping. The process is swapped out, and is later swapped in, in the memory.
 
 ![Addition of medium-term scheduling to the queueing diagram.](./Assets/image_19.png)
+
+#### Context Switch
+
+When an interrupt occurs, the system needs to save the current context of the process running on the CPU so that it can restore that context when its processing is done, essentially suspending the process and then resuming it.
+
+- `state save` save the current state of the CPU, be it in kernel or user mode
+- `state restore` to resume operations.
+- `context switch` save the current state of the process and load the state of the next process to be executed.
+  - `context` is the set of all the CPU registers, memory, and other data structures that define the state of a process. It save on the process PCB.
+
+Context-switch times are highly dependent on hardware support.
+
+### Process Creation
+
+**Tree of processes: **
+- The parent process creates a child process.
+- Each of these new processes may in turn create other processes.
+
+Most operating systems (including UNIX , Linux, and Windows) identify processes according to a unique process identifier (or `pid`)
+
+The init process (which always has a pid of 1) serves as the root parent process for all user processes.
+
+When a process creates a child process, that child process will need certain resources
+- Obtain its resources directly from the operating system,
+- Subset of the resources of the parent process
+  - Restricting a child process to a subset is good because prevents any process from overloading the system by creating too many child processes.
+
+When a process creates a new process, two possibilities for execution exist:
+1. The parent continues to execute concurrently with its children.
+2. The parent waits until some or all of its children have terminated.
+
+There are also two address-space possibilities for the new process:
+1. The child process is a duplicate of the parent process (it has the same program and data as the parent).
+2. The child process has a new program loaded into it.
+
+UNIX operating system:
+- A new process is created by the `fork()` system call.
+  - The new process consists of a copy of the address space of the original process
+
+![Process creation using the fork() system call.](./Assets/image_20.png)
+
+### Process Termination
+
+When a process terminates, it releases all the resources it has allocated, including memory, I/O devices, and files.
+
+The `exit()` system call is used to terminate a process.
+
+The `wait()` system call is used to wait for a child process to terminate.
+
+When a parent process terminates, it may choose to wait for its children to terminate before it itself terminates.

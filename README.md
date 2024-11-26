@@ -5,7 +5,20 @@ Ref https://github.com/gg-daddy/ebooks/blob/master/Operating%20System%20Concepts
 
 Author: Abraham Silberschatz, Peter Baer Galvin, Greg Gagne
 
-# Concept:
+- [Operating-System-Concepts](#operating-system-concepts)
+- [Chapter 1](#chapter-1)
+- [Chapter 2](#chapter-2)
+    - [System Programs](#system-programs)
+    - [Design Goals](#design-goals)
+  - [Operating-System Structure](#operating-system-structure)
+      - [Layered Approach:](#layered-approach)
+      - [Microkernels:](#microkernels)
+      - [Modules:](#modules)
+      - [Hybrid Systems](#hybrid-systems)
+    - [Operating-System Debugging](#operating-system-debugging)
+- [Chapter 3](#chapter-3)
+
+# Chapter 1
 
 `Operating systems` exist because they offer a reasonable way to solve the problem of creating a usable computing system. 
 The fundamental goal of computer systems is to execute programs and to make solving user problems easier. Computer hardware is constructed toward this goal. Since bare hardware alone is not particularly easy to use, application programs are developed. These programs require certain common operations, such as those controlling the I/O devices. The common functions of controlling and allocating resources are then brought together into one piece of software: the operating system.
@@ -331,3 +344,59 @@ In practice, very few operating systems adopt a single, strictly defined structu
 ### Operating-System Debugging
 
 ![Kernighan’s Law](./Assets/image_13.png)
+
+
+# Chapter 3
+
+A `process` is the unit of work in a modern time-sharing system.
+
+A system therefore consists of a collection of processes: 
+- Operating-system processes executing system code
+- User processes executing user code.
+
+By switching the CPU between processes, the operating system can make the computer more productive.
+
+A process:
+- The program code ~ sometimes known as the `text section`
+  - 
+- Process `stack` ~ which contains temporary data (such as function parameters, return addresses, and local variables)
+- `data section` ~  which contains global variables
+- `heap` ~ which is memory that is dynamically allocated during process run time.
+
+A program is a **passive** entity
+A process is an **active** entity
+
+- Two or more processes may be associated with the same program.
+- It is also common to have a process that spawns many processes as it runs
+  - Java runs the `JVM` as an ordinary process, which in turns executes the Java program Program in the Java virtual machine.
+
+![Process in memory.](./Assets/image_14.png)
+
+### Process State
+
+- `New`. The process is being created.
+- `Running`. Instructions are being executed.
+- `Waiting`. The process is waiting for some event to occur (such as an I/O completion or reception of a signal).
+- `Ready`. The process is waiting to be assigned to a processor.
+- `Terminated`. The process has finished execution
+
+These names are arbitrary, and they vary across operating systems.
+
+![Diagram of process state.](./Assets/image_15.png)
+
+Each process is represented in the operating system by a process control block `PCB` —also called a `task control block`. In brief, the PCB simply serves as the repository for any information that may vary from process to process. `PCB` include:
+
+- `Process state`
+- `Program counter`. The counter indicates the address of the next instruction to be executed for this process.
+- `CPU registers`. The registers vary in number and type, depending on the computer architecture. All info be save to allow the process to be continued correctly afterward (After interrupt).
+- `CPU-scheduling` information. This information includes a process priority, pointers to scheduling queues, and any other scheduling parameters.
+- `Memory-management information`. More details [Chapter 8](#chapter_8)
+- `Accounting information`. This information includes the amount of CPU
+and real time used, time limits, account numbers, job or process numbers,
+and so on.
+- `I/O status information`. This information includes the list of I/O devices
+allocated to the process, a list of open files, and so on.
+
+![Diagram showing CPU switch from process to process.](./Assets/image_16.png)
+
+### Threads

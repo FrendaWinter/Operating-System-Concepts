@@ -400,3 +400,42 @@ allocated to the process, a list of open files, and so on.
 ![Diagram showing CPU switch from process to process.](./Assets/image_16.png)
 
 ### Threads
+
+Most modern operating systems have extended the process concept to allow a process to have multiple threads of execution and thus to perform more than one task at a time.
+
+More details at [Chapter 4](#chapter_4)
+
+### Process Scheduling
+
+![The ready queue and various I/O device queues.](./Assets/image_17.png)
+
+As processes enter the system -> put into a `job queue` -> Load to main memory and are ready and waiting to execute `ready queue`
+
+The list of processes waiting for a particular I/O device is called a `device queue` 
+
+![Queueing-diagram representation of process scheduling.](./Assets/image_18.png)
+
+- The process could issue an I/O request and then be placed in an I/O queue.
+- The process could create a new child process and wait for the child’s
+termination.
+- The process could be removed forcibly from the CPU, as a result of an
+interrupt, and be put back in the ready queue.
+
+### Schedulers
+
+- The `long-term scheduler`, or `job scheduler`
+-  The `short-term scheduler`, or `CPU scheduler` -> Select new process for the `CPU`
+-  The primary distinction between these two schedulers lies in frequency of execution 
+   - The `short-term scheduler` must be fast, quick, can't wait time much to choose process, it make `CPU` less efficiency.
+   - The `long-term scheduler` may need to be invoked only when a process leaves the system. Because of the longer interval between executions, it can afford to take more time to decide which process should be selected for execution.
+
+
+It is important that the `long-term scheduler` make a careful selection, these are two type of process can be consider:
+- An `I/O -bound process` is one that spends more of its time doing I/O than
+it spends doing computations.
+- A `CPU-bound process`, in contrast, generates I/O requests infrequently, using more of its time doing computations.
+
+Some operating systems, such as time-sharing systems, may introduce an intermediate level of scheduling. The key idea behind a `medium-term scheduler` is that sometimes it can be advantageous to remove a process from memory
+- This scheme is called swapping. The process is swapped out, and is later swapped in, in the memory.
+
+![Addition of medium-term scheduling to the queueing diagram.](./Assets/image_19.png)

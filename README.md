@@ -17,6 +17,13 @@ Author: Abraham Silberschatz, Peter Baer Galvin, Greg Gagne
       - [Hybrid Systems](#hybrid-systems)
     - [Operating-System Debugging](#operating-system-debugging)
 - [Chapter 3](#chapter-3)
+    - [Process State](#process-state)
+    - [Threads](#threads)
+    - [Process Scheduling](#process-scheduling)
+    - [Schedulers](#schedulers)
+      - [Context Switch](#context-switch)
+    - [Process Creation](#process-creation)
+    - [Process Termination](#process-termination)
 
 # Chapter 1
 
@@ -488,4 +495,61 @@ The `exit()` system call is used to terminate a process.
 
 The `wait()` system call is used to wait for a child process to terminate.
 
-When a parent process terminates, it may choose to wait for its children to terminate before it itself terminates.
+A parent may terminate the execution of one of its children for a variety of reasons, such as these:
+- The child has exceeded its usage of some of the resources that it has been allocated. (To determine whether this has occurred, the parent must have a mechanism to inspect the state of its children.)
+- The task assigned to the child is no longer required.
+- The parent is exiting, and the operating system does not allow a child to continue if its parent terminates.
+
+When a process terminates, its resources are deallocated by the OS.
+- However, its entry in the process table must remain there until the parent calls `wait()`, because the process table contains the process’s exit status.
+- A process that has terminated, but whose parent has not yet called wait() -> `zombie process` 
+- A process that has terminated, parent has not called `wait()` and it terminated -> `orphans process`
+-  Linux and UNIX deal with `orphans process` by assigning the `init` process as the new parent. The `init` process periodically invokes `wait()` allow releasing resources.
+
+### Inter-process Communication
+
+- Any process that does not share data with any other process is independent.
+- Any process that shares data with other processes is a cooperating process.
+
+There are several reasons for providing an environment that allows process cooperation:
+- Information sharing. 
+- Computation speedup.
+- Modularity.
+- Convenience.
+
+Cooperating processes require an interprocess communication (`IPC`):
+- Shared memory.
+- Message passing.
+
+![Communications models.](./Assets/image_20.png)
+
+Shared memory suffers from cache coherency issues -> message passing become more preferred mechanism for IPC.
+
+#### Shared-Memory Systems
+
+- The process creating the shared-memory segment. Typically, in the address space of that process.
+- Other processes that wish to communicate using this shared-memory segment must attach it to their address space
+- Normally, the OS tries to prevent one process from accessing another process’s
+memory -> So the processes must agree to remove this restriction.
+
+The `producer–consumer` approach:
+- Have available a buffer of items that can be filled by the producer and emptied by the consumer.
+- A `producer` can produce one item while the `consumer` is consuming another item
+- The `producer` and `consumer` must be synchronized, so that the `consumer` does not try to consume an item that has not yet been produced.
+  - `Unbounded buffer` - no limit on the size of the buffer - the producer can always produce new items.
+  - `Bounded buffer` - limited - the `consumer` must wait if the buffer is empty, and the `producer` must wait if the buffer is full.
+
+#### Message-Passing Systems
+
+A message-passing facility provides at least two operations:
+- `send` (message) 
+- `receive` (message)
+
+Here are several methods for logically implementing a link and the `send()`/`receive()` operations:
+- Direct or indirect communication
+- Synchronous or asynchronous communication
+- Automatic or explicit buffering
+
+**Naming**
+
+schemes (symmetric and asymmetric)

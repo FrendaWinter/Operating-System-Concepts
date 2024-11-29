@@ -517,7 +517,7 @@ There are several reasons for providing an environment that allows process coope
 - Modularity.
 - Convenience.
 
-Cooperating processes require an interprocess communication (`IPC`):
+Cooperating processes require an inter-process communication (`IPC`):
 - Shared memory.
 - Message passing.
 
@@ -545,6 +545,8 @@ A message-passing facility provides at least two operations:
 - `send` (message) 
 - `receive` (message)
 
+For 2 process can be communicate, a `communication link` must exist between them.
+
 Here are several methods for logically implementing a link and the `send()`/`receive()` operations:
 - Direct or indirect communication
 - Synchronous or asynchronous communication
@@ -552,4 +554,62 @@ Here are several methods for logically implementing a link and the `send()`/`rec
 
 **Naming**
 
-schemes (symmetric and asymmetric)
+Under direct communication, there are 2 schemes:
+- Symmetric: 2 processes must know each other identities.
+- Asymmetric: Just sender need to know the recipient identities
+
+With indirect communication:
+- The messages are sent to and received from mailboxes, or ports.
+  - Sender send a messages to a mailbox (owned either by a process or by the operating system)
+  - The recipient receive a message from mailbox.
+    - Depend on the polices of the mailbox, one or more recipient can receive the messages
+  - When a process that owns a mailbox terminates, the mailbox disappears. Any process that subsequently sends a message to this mailbox must be notified that the mailbox no longer exists.
+
+**Synchronization** Message passing may be either blocking or nonblocking—
+also known as synchronous and asynchronous
+
+- `Blocking send.` The sending process is blocked until the message is
+received by the receiving process or by the mailbox.
+- `Nonblocking send.` The sending process sends the message and resumes
+operation.
+- `Blocking receive.` The receiver blocks until a message is available.
+- `Nonblocking receive.` The receiver retrieves either a valid message or a null.
+
+**Buffering** messages exchanged by communicating processes reside in a temporary queue.
+
+- `Zero capacity.` The queue has a maximum length of zero; thus, the link
+cannot have any messages waiting in it. In this case, the sender must block
+until the recipient receives the message.
+- `Bounded capacity.` The queue has finite length n; and the sender can continue execution without waiting. The link’s capacity is finite, however. If the link is full, the sender must block until space is available in the queue.
+- `Unbounded capacity.` The queue’s length is potentially infinite; thus, any
+number of messages can wait in it. The sender never blocks.
+
+### Examples of IPC Systems
+
+#### POSIX Shared Memory
+
+POSIX shared memory is organized using memory-mapped files, which associate the region of shared memory with a file.
+
+- Create a shared-memory object using the `shm_open()` system call
+- Once the object is established, the `ftruncate()` function is used to configure the size of the object in bytes.
+- Finally, the `mmap()` function establishes a memory-mapped file containing the shared-memory object. -> returns a pointer to the memory-mapped file that is used for accessing the shared-memory object.
+
+#### Mach
+
+#### Windows
+
+Windows provides support for multiple operating environments, or `subsystems`
+- The application programs can be considered `clients` of a subsystem `server`.
+
+The message-passing facility in Windows is called the advanced local procedure call (`ALPC`)
+
+Windows uses two types of ports: 
+- Connection ports
+- Communication ports.
+
+When an `ALPC` channel is created, one of three message-passing techniques is chosen:
+- For small messages (up to 256 bytes), the port’s message queue is used as intermediate storage, and the messages are copied from one process to the other.
+- Larger messages must be passed through a section object, which is a region of shared memory associated with the channel.
+- When the amount of data is too large to fit into a section object, an API is available that allows server processes to read and write directly into the address space of a client.
+
+![Advanced local procedure calls in Windows.](image_22.png)

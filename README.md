@@ -613,3 +613,13 @@ When an `ALPC` channel is created, one of three message-passing techniques is ch
 - When the amount of data is too large to fit into a section object, an API is available that allows server processes to read and write directly into the address space of a client.
 
 ![Advanced local procedure calls in Windows.](image_22.png)
+
+# Chapter 4 - Threads
+
+![Single-threaded and multithreaded processes.](./Assets/image_23.png)
+
+**Benefits:**
+- Responsiveness
+- Resource sharing.
+- Economy.
+- Scalability

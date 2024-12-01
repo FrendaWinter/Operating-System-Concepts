@@ -1,6 +1,40 @@
 # Chapter 3 exercises
 
 #### 3.1 Using the program shown in Figure 3.30, explain what the output will be at `LINE` A.
+
+```c
+#include <sys/types.h>
+#include <stdio.h>
+#include <unistd.h>
+
+int value = 5;
+int main()
+{
+    pid_t pid;
+    pid = fork();
+    if (pid == 0) { /* child process */
+        value += 15;
+        printf("CHILD: value = %d\n",value); /* LINE B */
+        return 0;
+    }
+    else if (pid > 0) { /* parent process */
+        wait(NULL);
+        printf("PARENT: value = %d\n",value); /* LINE A */
+        return 0;
+    }
+}
+```
+
+Output: `PARENT: value = 5`
+
+- When `fork()` is called, the operating system creates a new process called the child process, which is a duplicate of the parent process.
+- Both the parent and child processes have their own separate memory space, including their own copies of all variables.
+- Any changes made to a variable in one process (parent or child) will not affect the variable in the other process.
+
+So after `wait(NULL);` -> the child process finishes, the parent continues execution. -> `value` of parent process still equal to `5`
+
+Try to print `value` of child process, it return `CHILD: value = 20`
+
 #### 3.2 Including the initial parent process, how many processes are created by the program shown in Figure 3.31?
 
 

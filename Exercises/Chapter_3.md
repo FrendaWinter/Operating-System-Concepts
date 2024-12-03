@@ -49,12 +49,19 @@ int main()
     fork();
     /* and fork another */
     fork();
+
     return 0;
 }
 ```
 
+8 process: 
+- First `fork();` -> 1 -> 2
+- Second `fork();` -> 2 -> 4
+- Third `fork();` -> 4 -> 8
+
 #### 3.3 Original versions of Apple’s mobile IOS operating system provided no means of concurrent processing. Discuss three major complications that concurrent processing adds to an operating system.
 - Context Switching Overhead
+
 ---
 
 #### 3.4 The Sun UltraSPARC processor has multiple register sets. Describe what happens when a context switch occurs if the new context is already loaded into one of the register sets. What happens if the new context is in memory rather than in a register set and all the register sets are in use?
@@ -67,6 +74,10 @@ A context switch here simply requires changing the pointer to the current regist
 - Heap
 - Shared memory segments
 
+Each process have their own Stack and Heap. Copy init value from parent but not share.
+
+Shared memory segments explicitly created using inter-process communication (`IPC`) mechanisms (e.g., `shmget`, `mmap` with `MAP_SHARED`) are shared between the parent and the child. Both processes can access and modify the same shared memory region.
+
 ---
 
 #### 3.6 Consider the “exactly once” semantic with respect to the RPC mechanism. Does the algorithm for implementing this semantic execute correctly even if the ACK message sent back to the client is lost due to a network problem? Describe the sequence of messages, and discuss whether “exactly once” is still preserved.
@@ -74,3 +85,92 @@ A context switch here simply requires changing the pointer to the current regist
 ---
 
 #### 3.7 Assume that a distributed system is susceptible to server failure. What mechanisms would be required to guarantee the “exactly once” semantic for execution of RPC s?
+
+### 3.8 Describe the differences among short-term, medium-term, and long-term scheduling
+
+**Short-Term Scheduling (CPU Scheduling):**
+
+- Purpose: Determines which process in the ready queue will be executed by the CPU next.
+- Speed: Operates very quickly, as decisions are made frequently (every few milliseconds).
+- Functionality: Transfers the selected process from the ready state to the running state, ensuring efficient CPU utilization.
+- Execution: Often involves loading process instructions and data from main memory or CPU cache into the CPU registers.
+
+**Long-Term Scheduling (Job Scheduling):**
+
+- Purpose: Determines which programs or processes are admitted into the system for processing.
+- Speed: Operates at a slower pace compared to short-term scheduling, as it manages high-level decisions like admitting new jobs into the system.
+- Functionality: Loads processes from secondary storage (e.g., disk) into main memory, deciding the mix of I/O-bound and CPU-bound processes to balance system performance.
+
+**Medium-Term Scheduling (Swapping):**
+
+- Purpose: Optimizes system performance by temporarily removing (`swapping out`) processes from main memory and reintroducing them later (`swapping in`).
+- Speed: Operates slower than short-term but faster than long-term scheduling. It manages memory resources effectively.
+- Functionality: Frees up main memory by moving processes to secondary storage (e.g., a swap file or partition) and brings them back when resources are available or when a process has higher priority.
+
+#### 3.10 Construct a process tree similar to Figure 3.8. To obtain process information for the UNIX or Linux system, use the command `ps -ael`
+
+Use the command `man ps` to get more information about the `ps` command. The task manager on Windows systems does not provide the parent process ID , but the process monitor tool, available from `technet.microsoft.com`, provides a process-tree tool
+
+---
+
+####  3.11 Explain the role of the init process on UNIX and Linux systems in regard to process termination.
+
+---
+
+####  3.12 Including the initial parent process, how many processes are created by the program shown in Figure 3.32?
+
+We have 4 `fork()` so 2^4 = 16
+
+```c
+#include <stdio.h>
+#include <unistd.h>
+int main()
+{
+    int i;
+    for (i = 0; i < 4; i++)
+    fork();
+    return 0;
+}
+```
+---
+
+####  3.13 Explain the circumstances under which which the line of code marked printf("LINE J") in Figure 3.33 will be reached.
+The line of code printf("LINE J"); in the child process section will be reached only if the execlp() function fails.
+Explanation:
+
+The `execlp()` Function:
+- `execlp()` replaces the current process image with a new process image specified by the file path (in this case, `/bin/ls`).
+- If `execlp()` is successful, the child process is replaced entirely by the ls program, and no subsequent lines in the child process will execute.
+- If `execlp()` fails (e.g., because the file `/bin/ls` does not exist or there are insufficient permissions to execute it), the `execlp()` call returns -1, and the code following it (including `printf("LINE J");`) will be executed.
+
+Key Conditions for `execlp()` Failure:
+- The specified program (`/bin/ls`) does not exist at the given path.
+- The program exists but the process lacks execute permissions.
+- Other system-level errors (e.g., lack of memory or too many open files).
+
+Parent Process Behavior:
+- The parent process is unaffected by the `execlp()` call in the child process. It will wait for the child process to complete (successful or otherwise) and then print `Child Complete`.
+
+---
+
+####  3.14 Using the program in Figure 3.34, identify the values of pid at lines A, B, C, and D. (Assume that the actual pids of the parent and child are 2600 and 2603, respectively.)
+
+---
+
+####  3.15 Give an example of a situation in which ordinary pipes are more suitable than named pipes and an example of a situation in which named pipes are more suitable than ordinary pipes.
+
+---
+
+#### 3.16 Consider the RPC mechanism. Describe the undesirable consequences that could arise from not enforcing either the “at most once” or “exactly once” semantic. Describe possible uses for a mechanism that has neither of these guarantees.
+
+---
+
+#### 3.17 Using the program shown in Figure 3.35, explain what the output will be at lines X and Y.
+
+---
+
+#### 3.18 What are the benefits and the disadvantages of each of the following? Consider both the system level and the programmer level.
+a. Synchronous and asynchronous communication
+b. Automatic and explicit buffering
+c. Send by copy and send by reference
+d. Fixed-sized and variable-sized messages

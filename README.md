@@ -614,6 +614,68 @@ When an `ALPC` channel is created, one of three message-passing techniques is ch
 
 ![Advanced local procedure calls in Windows.](image_22.png)
 
+### Communication in Client–Server Systems
+
+The client–server communication: sockets, remote procedure calls (RPCs), and pipes. These are similar technic with shared memory and message passing
+
+#### Sockets
+
+1. **Definition**:
+   - A socket is an endpoint for communication in a network, identified by an IP address and port number.
+
+2. **Client-Server Architecture**:
+   - The **server** listens on a specific port, waiting for client requests.
+   - The **client** initiates a connection using an arbitrary port (greater than 1024).
+
+3. **Well-Known Ports**:
+   - Ports below 1024 are reserved for standard services:
+     - Telnet: Port 23
+     - FTP: Port 21
+     - HTTP: Port 80
+
+4. **Connection Example**:
+   - A client at IP `146.86.5.20` with port `1625` connects to a web server at IP `161.25.19.8` on port `80`.
+   - The connection is defined by the unique socket pair: `(146.86.5.20:1625)` and `(161.25.19.8:80)`.
+
+5. **Unique Connections**:
+   - Each connection must have a unique socket pair.
+   - If another client process connects to the same server, it will use a different port number (greater than 1024) to ensure uniqueness.
+
+### Remote Procedure Call (RPC)
+
+1. **Definition**:
+   - RPC abstracts the procedure-call mechanism for use between systems over a network.
+   - Built on message-based communication, enabling processes on separate systems to interact.
+
+2. **Structure**:
+   - RPC messages are well-structured, containing:
+     - An identifier specifying the function to execute.
+     - Parameters for the function.
+   - Addressed to an RPC daemon listening on a specific port.
+
+3. **Ports**:
+   - Systems use ports to differentiate network services.
+   - Example: A server providing a list of current users may attach this RPC service to port 3027.
+
+4. **Stubs and Parameter Marshalling**:
+   - **Stub**:
+     - A client-side stub hides communication details, locates the server port, and packages parameters.
+     - The server-side stub receives the message, unmarshals the data, and invokes the procedure.
+   - **Parameter Marshalling**:
+     - Converts machine-dependent data into a machine-independent representation (e.g., XDR) for transmission.
+
+5. **Data Representation**:
+   - Differences in data representation (e.g., big-endian vs. little-endian) are resolved using a machine-independent format like XDR.
+
+6. **Reliability**:
+   - **"At Most Once" Semantics**:
+     - Ensures duplicate messages are ignored using timestamps.
+   - **"Exactly Once" Semantics**:
+     - Uses acknowledgments (ACKs) to confirm message receipt and execution, resending calls if needed.
+
+7. **Binding**:
+   - Binding between client and server may occur at link, load, or execution time to establish communication.
+
 # Chapter 4 - Threads
 
 ![Single-threaded and multithreaded processes.](./Assets/image_23.png)

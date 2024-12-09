@@ -155,6 +155,27 @@ Parent Process Behavior:
 
 ####  3.14 Using the program in Figure 3.34, identify the values of pid at lines A, B, C, and D. (Assume that the actual pids of the parent and child are 2600 and 2603, respectively.)
 
+[Code](../Code/Chapter_3/3_34.c)
+
+Here is how the values of `pid` and `pid1` are determined at lines A, B, C, and D based on the behavior of the `fork()` system call:
+
+1. **Behavior of `fork()`**:
+   - When `fork()` is called, it creates a new child process.
+   - In the **child process**, `fork()` returns `0`.
+   - In the **parent process**, `fork()` returns the **PID of the child process**.
+
+2. **Details of Variables**:
+   - `pid`: Holds the return value of `fork()`.
+   - `pid1`: Set using `getpid()`, which retrieves the PID of the current process.
+
+### Values at Each Line
+| Line  | Process | Explanation                                     | Value         |
+| ----- | ------- | ----------------------------------------------- | ------------- |
+| **A** | Child   | `fork()` returns `0` in the child process.      | `pid = 0`     |
+| **B** | Child   | `getpid()` retrieves the child’s PID (`2603`).  | `pid1 = 2603` |
+| **C** | Parent  | `fork()` returns the PID of the child (`2603`). | `pid = 2603`  |
+| **D** | Parent  | `getpid()` retrieves the parent’s PID (`2600`). | `pid1 = 2600` |
+
 ---
 
 ####  3.15 Give an example of a situation in which ordinary pipes are more suitable than named pipes and an example of a situation in which named pipes are more suitable than ordinary pipes.
@@ -167,6 +188,22 @@ Parent Process Behavior:
 
 #### 3.17 Using the program shown in Figure 3.35, explain what the output will be at lines X and Y.
 
+![Output 3.35](../Assets/c3_3.35.png)
+
+[Code](../Code/Chapter_3/3_35.c)
+
+The child has its own separate memory space, meaning changes in the child's memory do not affect the parent's memory.
+
+**Child Process (pid == 0):**
+
+- Iterates through the nums array and modifies each element (nums[i] *= -i).
+- Prints the modified array values at LINE X.
+
+**Parent Process (pid > 0):**
+
+- Waits for the child process to complete using wait(NULL).
+- Prints its own version of the nums array at LINE Y, which remains unmodified.
+
 ---
 
 #### 3.18 What are the benefits and the disadvantages of each of the following? Consider both the system level and the programmer level.
@@ -174,3 +211,20 @@ a. Synchronous and asynchronous communication
 b. Automatic and explicit buffering
 c. Send by copy and send by reference
 d. Fixed-sized and variable-sized messages
+
+
+#### 3.19
+
+![3.19 result](../Assets/c3_3.19.png)
+
+**PROCESS STATE CODES** `man ps`
+
+- `D`    uninterruptible sleep (usually I/O)
+- `I`    idle kernel thread
+- `R`    running or runnable (on run queue)
+- `S`    interruptible sleep (waiting for an event to complete)
+- `T`    stopped by job control signal
+- `t`    stopped by debugger during the tracing
+- `W`    paging (not valid since Linux 2.6)
+- `X`    dead (should never be seen)
+- `Z`    defunct (“zombie”) process, terminated but not reaped by its parent

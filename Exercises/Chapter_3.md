@@ -115,6 +115,10 @@ Use the command `man ps` to get more information about the `ps` command. The tas
 
 ####  3.11 Explain the role of the init process on UNIX and Linux systems in regard to process termination.
 
+- **Adopting Orphaned Processes:** When a parent process terminates before its child processes, the child processes become "orphaned."The init process (with PID 1) automatically adopts these orphaned processes, ensuring they remain managed by the system.
+
+- **Reaping Zombie Processes:** When a process terminates, it enters a "zombie" state until its parent retrieves its exit status using system calls like wait() or waitpid(). If the parent process fails to perform this cleanup or has already terminated, init reaps the zombie processes. This prevents the accumulation of unused process table entries, which could otherwise lead to resource exhaustion.
+- 
 ---
 
 ####  3.12 Including the initial parent process, how many processes are created by the program shown in Figure 3.32?
@@ -230,3 +234,8 @@ d. Fixed-sized and variable-sized messages
 - `Z`    defunct (“zombie”) process, terminated but not reaped by its parent
 
 #### 3.20
+
+[Code](../Code/Chapter_3/3.20.c)
+---
+
+#### 3.21

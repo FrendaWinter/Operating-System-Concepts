@@ -102,15 +102,19 @@ chapter
 - The multithreaded sorting program described in Project 2 in this
 chapter
 - The multithreaded web server described in Section 4.1
+
+---
+
 ### 4.14 A system with two dual-core processors has four processors available for scheduling. A CPU-intensive application is running on this system. All input is performed at program start-up, when a single file must be opened. Similarly, all output is performed just before the program terminates, when the program results must be written to a single file. Between startup and termination, the program is entirely CPU-bound. Your task is to improve the performance of this application by multithreading it. The application runs on a system that uses the one-to-one threading model (each user thread maps to a kernel thread).
 - How many threads will you create to perform the input and output? Explain.
 - How many threads will you create for the CPU-intensive portion of the application? Explain.
+
 ---
 
 #### 4.15 Consider the following code segment:
 
 ```c
-    pid t pid;
+    pid_t pid;
     pid = fork();
     if (pid == 0) { /* child process */
         fork();
@@ -118,8 +122,9 @@ chapter
     }
     fork();
 ```
-a. How many unique processes are created?
+a. How many unique processes are created? ~ 6
 b. How many unique threads are created?
+
 #### 4.16 As described in Section 4.7.2, Linux does not distinguish between processes and threads. Instead, Linux treats both in the same way, allowing a task to be more akin to a process or a thread depending on the set of flags passed to the clone() system call. However, other operating systems, such as Windows, treat processes and threads differently. Typically, such systems use a notation in which the data structure for a process contains pointers to the separate threads belonging to the process. Contrast these two approaches for modeling processes and threads within the kernel.
 ---
 

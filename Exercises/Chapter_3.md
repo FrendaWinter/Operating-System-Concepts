@@ -240,4 +240,13 @@ d. Fixed-sized and variable-sized messages
 
 #### 3.21
 
+[Code](../Code/Chapter_3/3.21.c)
+
 Ref: https://en.wikipedia.org/wiki/Collatz_conjecture
+
+
+---
+
+#### 3.22
+
+[Code](../Code/Chapter_3/3.22.c)

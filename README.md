@@ -681,7 +681,105 @@ The client–server communication: sockets, remote procedure calls (RPCs), and p
 ![Single-threaded and multithreaded processes.](./Assets/image_23.png)
 
 **Benefits:**
-- Responsiveness
-- Resource sharing.
-- Economy.
-- Scalability
+- **Responsiveness:** Multithreading an interactive application may allow a program to continue running even if part of it is blocked or is performing a lengthy operation, thereby increasing responsiveness to the user.
+- **Resource sharing:** threads share the memory and the resources of the process to which they belong by default. The benefit of sharing code and data is that it allows an application to have several different threads of activity within the same address space
+- **Economy:** Allocating memory and resources for `process` creation is costly. The threads share the resources of the process to which they belong, it is more economical to create and context-switch threads.
+- **Scalability:** The threads may be running in parallel on different processing cores. A single-threaded process can run on only one processor, regardless how many are available. 
+
+![Single-threaded and multithreaded processes.](./Assets/image_24.png)
+
+### **AMDAHL’S LAW**
+
+Amdahl's Law is a principle in computer science that quantifies the performance improvement in a system when parts of it are optimized, particularly in parallel computing. It demonstrates how the speedup of a program using multiple processors is limited by the portion of the program that cannot be parallelized.
+
+**Formula:**
+\[
+S = \frac{1}{(1 - P) + \frac{P}{N}}
+\]
+
+**Where:**
+- **S**: The overall speedup of the program.
+- **P**: The proportion of the program that can be parallelized.
+- **(1 - P)**: The proportion of the program that is sequential (cannot be parallelized).
+- **N**: The number of processors or parallel units.
+
+**Key Insights:**
+1. **Sequential Limitation**: No matter how many processors are added, the speedup is constrained by the sequential portion of the program.
+2. **Diminishing Returns**: As **N** (the number of processors) increases, the incremental speedup decreases due to the dominance of the sequential portion.
+
+**Practical Implications:**
+- `Amdahl's Law` emphasizes minimizing the sequential part of a program to maximize performance gains in parallel computing.
+- It highlights that even with infinite processors, the maximum speedup is \(\frac{1}{1-P}\).
+
+**Example:**
+If 70% (\(P = 0.7\)) of a program can be parallelized, and there are 4 processors (\(N = 4\)):
+
+\[
+S = \frac{1}{(1 - 0.7) + \frac{0.7}{4}} = \frac{1}{0.3 + 0.175} = 2.5
+\]
+
+The speedup is 2.5 times the original performance.
+
+**Conclusion:**
+`Amdahl's Law` is critical for understanding the scalability limits of parallel processing systems and underscores the importance of reducing the sequential components of a program to achieve better performance.
+
+
+#### Parallelism and concurrency 
+
+- A system is parallel if it can perform more than one task simultaneously.
+- A concurrent system supports more than one task by allowing all
+the tasks to make progress
+
+**Types of Parallelism:**
+- Data parallelism
+- Task parallelism
+
+#### User and kernel level thread 
+- User threads: Supported above the kernel and are managed without kernel support
+- Kernel threads: Supported and managed directly by the operating system.
+
+Ref: https://stackoverflow.com/questions/10386815/stdthreads-are-managed-in-user-or-kernel-space
+
+
+A user level thread's scheduling is maintained by the user himself (via the interface provided by a library) and the kernel ends up allotting just a single kernel thread to the whole process. Kernel would treat the process as a single threaded and any blocking call by one of the threads would end up blocking all the threads of that process. Refer to http://www.personal.kent.edu/~rmuhamma/OpSystems/Myos/threads.htm
+
+**Multithreading Models:**
+- Many-to-One Model
+- One-to-One Model
+- Many-to-Many Model
+
+### Thread Libraries
+
+**Popular:**
+- POSIX Pthreads
+- Windows
+- Java
+
+**Note:**
+- For POSIX and Windows threading, any data declared globally -> shared among all threads belonging to the same process. 
+- Because Java has no notion of global data, access to shared data must be explicitly arranged between threads. Data declared local to a function are typically stored on the stack. Since each thread has its own stack, each thread has its own copy of local data.
+
+**Asynchronous threading and synchronous threading:**
+- With `asynchronous threading`, once the parent creates a child thread, the parent resumes its execution, so that the parent and child execute concurrently. Each thread runs independently of every other thread, and the parent thread need not know when its child terminates. Because the threads are independent, there is typically little data sharing between threads.
+
+- `Synchronous threading` occurs when the parent thread creates one or more children and then must wait for all of its children to terminate before it resumes the so-called `fork`-`join` strategy. Here, the threads created by the parent perform work concurrently, but the parent cannot continue until this work has been completed. Once each thread has finished its work, it terminates and joins with its parent. Only after all of the children have joined can the parent resume execution. Typically, synchronous threading involves significant data sharing among threads. 
+
+#### Pthreads
+
+Provided as either a user-level or a kernel-level library. 
+
+
+#### Windows 32 API
+Windows thread library is a kernel-level library
+#### Java Threads
+
+### Implicit Threading 
+
+Transfer the creation and management of threading from application developers to compilers and run-time libraries.
+
+#### Thread Pools
+#### OpenMP
+#### Grand Central Dispatch
+#### Other Approaches
+
+### Threading Issues

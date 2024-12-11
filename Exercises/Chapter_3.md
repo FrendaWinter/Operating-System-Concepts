@@ -222,9 +222,11 @@ d. Fixed-sized and variable-sized messages
 - `D`    uninterruptible sleep (usually I/O)
 - `I`    idle kernel thread
 - `R`    running or runnable (on run queue)
-- `S`    interruptible sleep (waiting for an event to complete)
+- `S`    interruptive sleep (waiting for an event to complete)
 - `T`    stopped by job control signal
 - `t`    stopped by debugger during the tracing
 - `W`    paging (not valid since Linux 2.6)
 - `X`    dead (should never be seen)
 - `Z`    defunct (“zombie”) process, terminated but not reaped by its parent
+
+#### 3.20

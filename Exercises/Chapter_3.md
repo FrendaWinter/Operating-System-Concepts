@@ -239,3 +239,5 @@ d. Fixed-sized and variable-sized messages
 ---
 
 #### 3.21
+
+Ref: https://en.wikipedia.org/wiki/Collatz_conjecture

@@ -250,3 +250,24 @@ Ref: https://en.wikipedia.org/wiki/Collatz_conjecture
 #### 3.22
 
 [Code](../Code/Chapter_3/3.22.c)
+
+#### 3.23
+
+[Server Code](../Code/Chapter_3/3.22/Server.java)
+[Client Code](../Code/Chapter_3/3.24/Client.java)
+
+#### 3.24
+
+[Server Code](../Code/Chapter_3/3.22/Server.java)
+[Client Code](../Code/Chapter_3/3.24/Client.java)
+
+---
+
+#### 3.25
+
+[Server Code](../Code/Chapter_3/3.22/Server.java)
+[Client Code](../Code/Chapter_3/3.24/Client.java)
+
+---
+
+## Programming Projects

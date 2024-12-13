@@ -1,40 +1,41 @@
+
 import java.net.*;
 import java.io.*;
-import java.util.Random;
 
-public class DateServer
-{
-  public static void main(String[] args) {
-    try {
-      ServerSocket sock = new ServerSocket(6013);
-      /* now listen for connections */
-        while (true) {
-          Socket client = sock.accept();
-          PrintWriter pout = new
-          PrintWriter(client.getOutputStream(), true);
-          /* write the Date to the socket */
-          pout.println(getQuoteOfTheDay());
-          /* close the socket and resume */
-          /* listening for connections */
-          client.close();
+class EchoServer {
+
+    public static void main(String[] args) {
+        // Define the port number for the server to listen on
+        final int PORT = 6013;
+
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            System.out.println("Echo server started. Waiting for clients...");
+
+            while (true) {
+                // Accept a client connection
+                try (Socket clientSocket = serverSocket.accept()) {
+                    System.out.println("Client connected: " + clientSocket.getInetAddress());
+
+                    // Get input and output streams
+                    InputStream in = clientSocket.getInputStream();
+                    OutputStream out = clientSocket.getOutputStream();
+
+                    byte[] buffer = new byte[1024]; // Buffer to hold incoming data
+                    int bytesRead;
+
+                    // Read data from the client and echo it back
+                    while ((bytesRead = in.read(buffer)) != -1) {
+                        out.write(buffer, 0, bytesRead); // Echo the received data back to the client
+                        out.flush();
+                    }
+
+                    System.out.println("Client disconnected.");
+                } catch (IOException e) {
+                    System.err.println("Error handling client: " + e.getMessage());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Server error: " + e.getMessage());
         }
     }
-      catch (IOException ioe) {
-      System.err.println(ioe);
-    }
-  }
-
-  public static String getQuoteOfTheDay() {
-    // Array of quotes
-    String[] quotes = {
-        "Do what you can, with what you have, where you are. – Theodore Roosevelt",
-        "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
-        "Believe you can and you're halfway there. – Theodore Roosevelt",
-        "It always seems impossible until it’s done. – Nelson Mandela",
-        "Happiness is not something ready-made. It comes from your own actions. – Dalai Lama"
-    };
-    Random random = new Random();
-    int index = random.nextInt(quotes.length);
-    return quotes[index];
-  }
 }

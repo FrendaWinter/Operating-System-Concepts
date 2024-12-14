@@ -760,6 +760,7 @@ A user level thread's scheduling is maintained by the user himself (via the inte
 - Because Java has no notion of global data, access to shared data must be explicitly arranged between threads. Data declared local to a function are typically stored on the stack. Since each thread has its own stack, each thread has its own copy of local data.
 
 **Asynchronous threading and synchronous threading:**
+
 - With `asynchronous threading`, once the parent creates a child thread, the parent resumes its execution, so that the parent and child execute concurrently. Each thread runs independently of every other thread, and the parent thread need not know when its child terminates. Because the threads are independent, there is typically little data sharing between threads.
 
 - `Synchronous threading` occurs when the parent thread creates one or more children and then must wait for all of its children to terminate before it resumes the so-called `fork`-`join` strategy. Here, the threads created by the parent perform work concurrently, but the parent cannot continue until this work has been completed. Once each thread has finished its work, it terminates and joins with its parent. Only after all of the children have joined can the parent resume execution. Typically, synchronous threading involves significant data sharing among threads. 
@@ -770,7 +771,9 @@ Provided as either a user-level or a kernel-level library.
 
 
 #### Windows 32 API
+
 Windows thread library is a kernel-level library
+
 #### Java Threads
 
 ### Implicit Threading 
@@ -778,7 +781,29 @@ Windows thread library is a kernel-level library
 Transfer the creation and management of threading from application developers to compilers and run-time libraries.
 
 #### Thread Pools
+
+- Create a number of threads at process startup and place them into a pool.
+- Thread wait for work.
+- When a server receives a request, it awakens a thread from this pool
+  - If one is available -> passes it the request for service.
+  - Once the thread completes its service, it returns to the pool and awaits more work.
+
+Thread pools offer these benefits:
+1. Servicing a request with an existing thread is faster than waiting to create a thread.
+2. A thread pool limits the number of threads that exist at any one point.
+  - This is particularly important on systems that cannot support a large number of concurrent threads.
+3. Separating the task to be performed from the mechanics of creating the task allows us to use different strategies for running the task.
+
 #### OpenMP
+
+OpenMP is a set of compiler directives as well as an API for programs written in C, C++, or FORTRAN that provides support for parallel programming in shared-memory environments.
+
+Open MP identifies parallel regions as blocks of code that may run in parallel.
+
+Application developers insert compiler directives into their code at parallel regions, and these directives instruct the OpenMP run-time library to execute the region in parallel.
+
+[Example](./Code/Chapter_4/Example/omp.c)
+
 #### Grand Central Dispatch
 #### Other Approaches
 

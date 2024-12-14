@@ -60,11 +60,15 @@ int main()
 - Third `fork();` -> 4 -> 8
 
 #### 3.3 Original versions of Apple’s mobile IOS operating system provided no means of concurrent processing. Discuss three major complications that concurrent processing adds to an operating system.
-- Context Switching Overhead
+
+- **Synchronization and Race Conditions:** When multiple processes or threads access shared resources concurrently, such as files, memory, or hardware devices, synchronization becomes critical. Without proper controls, race conditions can occur where the output or state of a resource depends on the order in which processes execute.
+- **Deadlock and Resource Contention:** Deadlock occurs when two or more processes are waiting indefinitely for resources held by each other, resulting in a standstill. Resource contention, on the other hand, happens when multiple processes compete for limited resources (e.g., CPU, memory, or I/O devices), leading to inefficiency.
+- **Complexity in Debugging and Testing:** Concurrent systems exhibit non-deterministic behavior due to the unpredictability of thread execution order, making debugging and testing more difficult. Bugs like race conditions or deadlocks may only appear under specific timing conditions and are hard to reproduce.
 
 ---
 
-#### 3.4 The Sun UltraSPARC processor has multiple register sets. Describe what happens when a context switch occurs if the new context is already loaded into one of the register sets. What happens if the new context is in memory rather than in a register set and all the register sets are in use?
+#### 3.4 The Sun UltraSPARC processor has multiple register sets. Describe what happens when a context switch occurs if the new context is already loaded into one of the register sets. What happens if the new context is in memory rather than in a register set and all the register sets are in use? 
+
 A context switch here simply requires changing the pointer to the current register set.
 
 ---
@@ -85,6 +89,8 @@ Shared memory segments explicitly created using inter-process communication (`IP
 ---
 
 #### 3.7 Assume that a distributed system is susceptible to server failure. What mechanisms would be required to guarantee the “exactly once” semantic for execution of RPC s?
+
+---
 
 ### 3.8 Describe the differences among short-term, medium-term, and long-term scheduling
 

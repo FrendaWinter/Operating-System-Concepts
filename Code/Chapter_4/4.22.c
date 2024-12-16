@@ -63,7 +63,7 @@ void *generatePointAndCount(void *param)
         // Generate random values for x and y in the range -5 to 5
         p->x = randFrom(-RANGE, RANGE);
         p->y = randFrom(-RANGE, RANGE);
-
+        
         if (check_point_in_circle(p->x, p->y))
         {
             totalInCircle++;
@@ -77,9 +77,9 @@ void *generatePointAndCount(void *param)
 
 int main()
 {
-    double total;
+    int total;
     printf("Enter a total of point: ");
-    scanf("%lf", &total);
+    scanf("%d", &total);
 
     pthread_t tid;
     pthread_attr_t attr;

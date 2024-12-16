@@ -173,6 +173,32 @@ c. The number of kernel threads allocated to the program is greater than the num
 #### 4.19 Pthreads provides an API for managing thread cancellation. The pthread setcancelstate() function is used to set the cancellation state. Its prototype appears as follows: pthread setcancelstate(int state, int *oldstate) The two possible values for the state are PTHREAD CANCEL ENABLE and PTHREAD CANCEL DISABLE. Using the code segment shown in Figure 4.17, provide examples of two operations that would be suitable to perform between the calls to disable and enable thread cancellation.
 
 ---
+
+## Programming Problems
+
 #### 4.20
 
+[Code](../Code/Chapter_4/4.20.c)
+
+---
+
 #### 4.21
+
+
+---
+#### 4.22
+---
+#### 4.23
+---
+#### 4.24
+---
+#### 4.25
+---
+#### 4.26
+---
+#### 4.27
+---
+## Programming Projects
+
+### Project 1 —Sudoku Solution Validator
+### Project 2 —Multithreaded Sorting Application

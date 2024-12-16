@@ -184,9 +184,14 @@ c. The number of kernel threads allocated to the program is greater than the num
 
 #### 4.21
 
+[Code](../Code/Chapter_4/4.21.c)
 
 ---
+
 #### 4.22
+
+[Code](../Code/Chapter_4/4.22.c)
+
 ---
 #### 4.23
 ---

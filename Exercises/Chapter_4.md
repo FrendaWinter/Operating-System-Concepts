@@ -49,7 +49,6 @@ Ref: https://stackoverflow.com/questions/15983872/difference-between-user-level-
 - **Use ULTs** for lightweight, non-blocking tasks and when kernel involvement is unnecessary.
 - **Use KLTs** for tasks requiring true parallelism or robust handling of blocking operations.
 
-
 ---
 
 ### 4.3 Describe the actions taken by a kernel to context-switch between kernel-level threads.
@@ -77,12 +76,21 @@ Ref: https://stackoverflow.com/questions/15983872/difference-between-user-level-
 ### 4.7 Under what circumstances does a multithreaded solution using multiple kernel threads provide better performance than a single-threaded solution on a single-processor system?
 ---
 
-### 4.8 Which of the following components of program state are shared across
-threads in a multithreaded process?
+### 4.8 Which of the following components of program state are shared across threads in a multithreaded process?
 a. Register values
 b. Heap memory
 c. Global variables
 d. Stack memory
+
+
+**Shared:**
+- Heap memory: Threads in a multithreaded process share the heap memory. This allows them to allocate and access shared dynamic memory, which is useful for inter-thread communication and shared data.
+- Global variables: Global variables are shared among all threads within a process, as they reside in the global memory space, which is common to all threads.
+
+**Not Shared:**
+- Register values: Register values are private to each thread because each thread has its own set of CPU registers, which store the thread's execution state (such as program counter and processor-specific data).
+- Stack memory: Each thread has its own stack, used for local variables and function calls. This ensures that the threads' local computations and function invocations remain isolated.
+
 ### 4.9 Can a multithreaded solution using multiple user-level threads achieve better performance on a multiprocessor system than on a single- processor system? Explain.
 ---
 
@@ -90,18 +98,28 @@ d. Stack memory
 ---
 
 ### 4.11 Is it possible to have concurrency but not parallelism? Explain.
+
+Yes, it is possible to have concurrency without parallelism. Concurrency refers to the ability to manage and execute multiple tasks or threads in overlapping time frames, but not necessarily at the same time. For example, in a single-threaded architecture, a process can switch rapidly between different threads using context switching. This creates the illusion of concurrency as all threads make progress over time, even though only one thread is executed at any given moment.
+
+Parallelism, on the other hand, requires multiple tasks or threads to execute simultaneously, which typically requires multiple processors or cores. Therefore, concurrency can occur on a single-core system, whereas parallelism requires a multi-core or multi-processor setup.
 ---
 
 ### 4.12 Using Amdahl’s Law, calculate the speedup gain of an application that has a 60 percent parallel component for (a) two processing cores and (b) four processing cores.
+
+![4.120](../Assets/Chapter_4/image_4.12.png)
+
+Final Results:
+- Speedup for 2 cores: 1.43
+- Speedup for 4 cores: 1.82
 ---
 
 ### 4.13 Determine if the following problems exhibit task or data parallelism:
-- The multithreaded statistical program described in Exercise 4.21
-- The multithreaded Sudoku validator described in Project 1 in this
-chapter
-- The multithreaded sorting program described in Project 2 in this
-chapter
-- The multithreaded web server described in Section 4.1
+- The multithreaded statistical program described in Exercise 4.21 -> task parallelism
+- The multithreaded Sudoku validator described in Project 1 in this chapter -> task parallelism
+  - Each thread has different calculation
+- The multithreaded sorting program described in Project 2 in this chapter -> Data parallelism
+  - Each thread working on different data but perform same operation
+- The multithreaded web server described in Section 4.1 -> task parallelism
 
 ---
 
@@ -129,9 +147,32 @@ b. How many unique threads are created?
 ---
 
 #### 4.17 The program shown in Figure 4.16 uses the Pthreads API. What would be the output from the program at `LINE C` and `LINE P`?
+
+**Output:**
+
+```
+CHILD: value = 5
+PARENT: value = 0
+```
+
+[Code](../Code/Chapter_4/4.16.c)
+
+At the code, it create new process first with `fork()` so it have 2 process `child` and `parent`, they have their own memory, so the data is separated.
+- In the `child` process, it create new thread, the thread is modify the `value` data, but it is `child` process's `value`, not `parent`.
+- The `value` on `parent` process remain unchange.
+
 ---
 
-#### 4.18 Consider a multicore system and a multithreaded program written using the many-to-many threading model. Let the number of user-level threads in the program be greater than the number of processing cores in the system. Discuss the performance implications of the following scenarios.
+#### 4.18 Consider a multi core system and a multithreaded program written using the many-to-many threading model. Let the number of user-level threads in the program be greater than the number of processing cores in the system. Discuss the performance implications of the following scenarios.
 a. The number of kernel threads allocated to the program is less than the number of processing cores.
 b. The number of kernel threads allocated to the program is equal to the number of processing cores.
 c. The number of kernel threads allocated to the program is greater than the number of processing cores but less than the number of user-level threads.
+
+---
+
+#### 4.19 Pthreads provides an API for managing thread cancellation. The pthread setcancelstate() function is used to set the cancellation state. Its prototype appears as follows: pthread setcancelstate(int state, int *oldstate) The two possible values for the state are PTHREAD CANCEL ENABLE and PTHREAD CANCEL DISABLE. Using the code segment shown in Figure 4.17, provide examples of two operations that would be suitable to perform between the calls to disable and enable thread cancellation.
+
+---
+#### 4.20
+
+#### 4.21

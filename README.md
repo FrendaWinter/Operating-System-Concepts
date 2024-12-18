@@ -49,6 +49,29 @@ Author: Abraham Silberschatz, Peter Baer Galvin, Greg Gagne
       - [Other Approaches](#other-approaches)
     - [Threading Issues](#threading-issues)
       - [Thread canceling](#thread-canceling)
+      - [Thread-Local Storage](#thread-local-storage)
+      - [Scheduler Activations](#scheduler-activations)
+    - [Operating-System Examples](#operating-system-examples)
+      - [Windows Threads](#windows-threads)
+      - [Linux Threads](#linux-threads)
+- [Chapter 5](#chapter-5)
+  - [The Critical-Section Problem](#the-critical-section-problem)
+  - [Peterson’s Solution](#petersons-solution)
+  - [Synchronization Hardware](#synchronization-hardware)
+    - [Mutex Locks](#mutex-locks)
+    - [Semaphores](#semaphores)
+      - [Semaphore Usage](#semaphore-usage)
+      - [Semaphore Implementation](#semaphore-implementation)
+      - [Deadlocks and Starvation](#deadlocks-and-starvation)
+      - [Priority Inversion](#priority-inversion)
+  - [Classic Problems of Synchronization](#classic-problems-of-synchronization)
+    - [The Bounded-Buffer Problem](#the-bounded-buffer-problem)
+    - [The Readers – Writers Problem](#the-readers--writers-problem)
+    - [The Dining-Philosophers Problem](#the-dining-philosophers-problem)
+  - [Monitors](#monitors)
+  - [Alternative Approaches](#alternative-approaches)
+  - [Synchronization Examples](#synchronization-examples)
+  - [Alternative Approaches](#alternative-approaches-1)
 
 # Chapter 1
 
@@ -982,12 +1005,109 @@ With the code, the condition `while (flag[j] && turn == j);` make sure only one 
 
 A `mutex lock` has a boolean variable available whose value indicates if the lock is available or not.
 
+One process or thread `release()` then the other process `acquire()`
+
 ![Mutex locks](./Assets/image_30.png)
+
+The main disadvantage of the implementation given here is that it requires `busy waiting` 
+  - It mean While a process is in its critical section, any other process that tries to enter its critical section must loop continuously in the call to `acquire()` ~ `spinlock`
 
 ### Semaphores
 
+A semaphore `S` is an integer variable that, apart from initialization, is accessed only through two standard atomic operations: `wait()` and `signal()`.
+
+```c
+wait(S) {
+  while (S <= 0)
+  ; // busy wait
+  S--;
+}
+```
+
+```c
+signal(S) {
+  S++;
+}
+```
+
+#### Semaphore Usage
+
+- `Counting semaphore` ~  range over an unrestricted domain.
+
+- `Binary semaphore` ~ range only between 0 and 1 ~ similarly to mutex locks
+
+Counting semaphores can be used to control access to a given resource consisting of a finite number of instances.
+  - When a process releases a resource -> `signal()` ~ incrementing the count.
+  - When the count for the semaphore goes to `0`, all resources are being used.
+  - Other process will block until the count becomes greater than `0` again.
+
+We can make process execute in order with the process that need to execute first call `signal()`, the second process call `wait()`
+
+#### Semaphore Implementation
+
+To avoid **busy waiting**, When a process executes the `wait()` operation and finds that the `semaphore` value is not positivethe process can block itself.
+  - The `block` operation places a process into a waiting queue associated with the semaphore, and the state of the process is switched to the `waiting` state
+  - The process is restarted by a `wakeup()` operation, which changes the process from the `waiting` state to the `ready` state.
+```c
+typedef struct {
+  int value;
+  struct process *list;
+} semaphore;
+```
+
+```c
+wait(semaphore *S) {
+  S->value--;
+  if (S->value < 0) {
+    add this process to S->list;
+    block();
+  }
+}
+```
+
+```c
+signal(semaphore *S) {
+  S->value++;
+  if (S->value <= 0) {
+    remove a process P from S->list;
+    wakeup(P);
+  }
+}
+```
+
+The list of waiting processes can be easily implemented by a link field in each `process control block (PCB)`
+
+It is critical that semaphore operations be executed atomically
+  - Can't `wait()` and `signal()` operations on the same semaphore at the same time. 
+
+#### Deadlocks and Starvation
+
+`deadlocked` ~ two or more processes are waiting indefinitely for an event that can be caused only by one of the waiting processes
+
+`starvation` or `indefinite blocking` ~ processes wait indefinitely within the semaphore. Indefinite blocking may occur if we remove processes from the list associated with a semaphore in LIFO (last-in, first-out) order.
+
+#### Priority Inversion
+
+`Priority Inversion` problem is indirectly, a process with a lower priority has affected how long process with higher priority have to wait for resource.
+
+Typically these systems solve the problem by implementing a `priority-inheritance protocol`
+  - All processes that are accessing resources
+needed by a higher-priority process inherit the higher priority until they are finished with the resources in question.
+  - When they are finished, their priorities
+revert to their original values.
+
 ## Classic Problems of Synchronization
 
+### The Bounded-Buffer Problem
+
+### The Readers – Writers Problem
+
+### The Dining-Philosophers Problem
+
 ## Monitors
+
+## Alternative Approaches
+
+## Synchronization Examples
 
 ## Alternative Approaches

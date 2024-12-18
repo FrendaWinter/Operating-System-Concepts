@@ -980,6 +980,10 @@ With the code, the condition `while (flag[j] && turn == j);` make sure only one 
 
 ### Mutex Locks
 
+A `mutex lock` has a boolean variable available whose value indicates if the lock is available or not.
+
+![Mutex locks](./Assets/image_30.png)
+
 ### Semaphores
 
 ## Classic Problems of Synchronization

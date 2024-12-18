@@ -932,3 +932,58 @@ If none of these flags is set when `clone()` is invoked, no sharing takes place,
 
 # Chapter 5
 
+Process Synchronization: Discuss various mechanisms to ensure the orderly execution of cooperating processes that share a logical address space, so that data consistency is maintained
+
+A `cooperating process` is one that can affect or be affected by other processes executing in the system.
+
+`Race condition` ~ several processes access and manipulate the same data concurrently
+
+## The Critical-Section Problem
+
+The `Critical section` ~ when one process is executing in its critical section, no other process is allowed to execute in its critical section.
+
+![Critical section](./Assets/image_28.png)
+
+It have:
+- `Entry section` ~ request permission to enter its critical section.
+- `Exit section` ~ Notify the process leave the critical section
+- `Remainder section` ~ The remaining code. 
+
+A solution to the critical-section problem must satisfy the following three requirements:
+1. **Mutual exclusion.** If process `Pi` is executing in its critical section, then no other processes can be executing in their critical sections.
+2. **Progress.** If no process is executing in its critical section and some processes wish to enter their critical sections, then only those processes that are not executing in their remainder sections can participate in deciding which will enter its critical section next, and this selection cannot be postponed indefinitely.
+3. **Bounded waiting.** There exists a bound, or limit, on the number of times that other processes are allowed to enter their critical sections after a process has made a request to enter its critical section and before that request is granted.
+
+Two general approaches are used to handle critical sections in operating systems: 
+- `Preemptive kernels`: A preemptive kernel allows a process to be preempted while it is running in kernel mode.
+- `Non-preemptive kernels`: A non preemptive kernel does not allow a process running in kernel mode to be preempted; a kernel-mode process will run until it exits kernel mode, blocks, or voluntarily yields control of the CPU.
+  - A non preemptive kernel is essentially free from race conditions on kernel data structures, as only one process is active in the kernel at a time.
+
+## Peterson’s Solution
+
+A classic software-based solution to the critical-section problem.
+  - Peterson’s are not guaranteed to work on modern computer architectures.
+
+![Peterson's solution](./Assets/image_29.png)
+
+Peterson’s solution requires the two processes to share two data items:
+- `int turn;` ~ The variable turn indicates whose turn it is to enter its critical section.
+- `boolean flag[2];` ~ The `flag` array is used to indicate if a process is ready to enter its critical section.
+
+[Code Example](./Code/Chapter_5/5.8/main.c)
+
+With the code, the condition `while (flag[j] && turn == j);` make sure only one thread that execute critical section at the same time. `turn` only be `i` or `j`, can't be both.
+
+## Synchronization Hardware
+
+`Locking` that is, protecting critical regions through the use of locks
+
+### Mutex Locks
+
+### Semaphores
+
+## Classic Problems of Synchronization
+
+## Monitors
+
+## Alternative Approaches

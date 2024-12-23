@@ -1138,17 +1138,102 @@ revert to their original values.
 
 ### The Bounded-Buffer Problem
 
+Ref: https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem
+
+The Bounded-Buffer Problem is a classical synchronization problem that arises in systems where multiple processes share a fixed-size buffer, typically for producer-consumer scenarios. It is also known as the Producer-Consumer Problem.
+
+- **Buffer Overflow:** A producer must not add data to the buffer if it is already full.
+- **Buffer Underflow:** A consumer must not remove data from the buffer if it is empty.
+- **Race Conditions:** Simultaneous access to the buffer by producers and consumers must be synchronized to avoid inconsistencies (e.g., overwriting or corrupting data).
+
 ### The Readers – Writers Problem
+
+We require that the writers have exclusive access to the shared database while writing to the database.
+
+- No reader be kept waiting unless a writer has already obtained
+permission to use the shared object. In other words, no reader should wait for other readers to finish simply because a writer is waiting.
+- Once a writer is ready, that writer perform its write as soon as possible. In other words, if a writer is waiting to access the object, no new readers may start reading.
 
 ### The Dining-Philosophers Problem
 
+Ref: https://en.wikipedia.org/wiki/Dining_philosophers_problem
+
+Monitors are a high-level synchronization construct.
+
+The monitor construct ensures that only one process at a time is active within the monitor.
+
 ## Monitors
 
-## Alternative Approaches
+An abstract data type
+
+![A monitor to allocate a single resource.](./Assets/image_31.png)
+
+**Key Features of Monitors**
+
+1. **Encapsulation**:
+   - A monitor encapsulates shared variables, data structures, and methods to manipulate them.
+   - Only the monitor's methods can access the shared variables, ensuring controlled access.
+
+2. **Mutual Exclusion**:
+   - At most, one thread can execute a monitor method at any time. This prevents race conditions.
+
+3. **Condition Variables**:
+   - Monitors use condition variables to allow threads to wait or signal each other about specific conditions.
+   - Condition variables are associated with two operations:
+     - **Wait**: A thread waits for a condition to be true.
+     - **Signal**: A thread notifies one or more waiting threads that a condition is now true.
+
+**How Monitors Work**
+1. **Thread Entry**:
+   - Only one thread can execute a monitor's method at a time. If another thread tries to enter while the monitor is occupied, it is blocked until the monitor becomes available.
+   
+2. **Condition Variables**:
+   - Threads inside a monitor can release the monitor temporarily and wait for a condition using the `wait()` operation.
+   - Other threads can signal the waiting threads when the condition becomes true, using the `signal()` operation.
+
+3. **Synchronization**:
+   - Monitors use an implicit lock (or mutex) to ensure mutual exclusion.
+   - Condition variables allow threads to synchronize by waiting for and signaling changes in shared resource states.
 
 ## Synchronization Examples
 
+**Windows:**
+
+For kernel:
+- On a single-processor system,  it temporarily masks interrupts for all interrupt handlers that may also access the global resource.
+- On a multiprocessor system, Windows protects access to global resources
+using spinlocks. The kernel ensures that a thread will never be preempted while holding a spinlock.
+
+For hread synchronization outside the kernel
+- Dispatcher objects.
+
+
+**Solaris:**
+- An adaptive mutex
+
+**P_thread:**
+- `pthread_mutex_t`
+- `#include <semaphore.h>` -> `sem_t sem;`
+
+
 ## Alternative Approaches
+
+**Transactional Memory:**
+
+Ref: https://stackoverflow.com/questions/11255640/what-is-transactional-memory
+
+Transactional memory instead lets you designate sections of code as transactions. The transactional memory system (which can be implemented in hardware, software, or both) then attempts to give you the guarantee that any run of a program in which multiple threads execute transactions in parallel will be equivalent to a different run of the program in which the transactions all executed one after another, never at the same time.
+
+**OpenMP:**
+
+[OpenMP critical section protection](image.png)
+
+Still identify possible race conditions and adequately protect shared data using the this.
+
+**Functional Programming Languages:**
+- The fundamental difference between imperative and functional languages is that functional languages do not maintain state. That is, once a variable has been defined and assigned a value, its value is `immutable`, it cannot change. Because functional languages disallow mutable state, they need not be concerned with issues such as race conditions and deadlocks
+
+Ref - Erlang: https://www.erlang.org/doc/system/conc_prog.html
 
 # Chapter 6
 

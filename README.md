@@ -1243,59 +1243,109 @@ Ref - Erlang: https://www.erlang.org/doc/system/conc_prog.html
 
 ### CPU– I/O Burst Cycle
 
+The process execution consists of a cycle of CPU execution and I/O wait.
+
+CPU burst <--> I/O burst.
+
+- An I/O-bound program typically has many short CPU bursts. 
+- A CPU-bound program might have a few long CPU bursts. 
+
+This distribution can be important in the selection of an appropriate CPU-scheduling algorithm
+
 ### CPU Schedule
 
-Short-term Schedule
+Short-term Scheduler
 
 ### Preemptive Scheduling
 
+
+
 ### Dispatcher
+
+A component in the CPU-scheduling function. It in charge:
+- Switching context
+- Switching to user mode
+- Jumping to the proper location in the user program to restart that program
+
+The time it takes for the dispatcher to stop one process and start another running is known as the `dispatch latency`
 
 ## Scheduling Criteria
 
 ## Scheduling Algorithms
 
-### First-Come, First-Served Scheduling
+**First-Come, First-Served Scheduling**
 
-### Shortest-Job-First Scheduling
+**Shortest-Job-First Scheduling**
 
-### Priority Scheduling
+When the CPU is available, it is assigned to the process that has the smallest next CPU burst. If the next CPU bursts of two processes are the same, `FCFS` scheduling is used to break the tie.
 
-### Round-Robin Scheduling
+**Priority Scheduling**
 
-### Multilevel Queue Scheduling
+The CPU is allocated to the process with the highest priority. Equal-priority processes are scheduled in `FCFS` order.
 
-### Multilevel Feedback Queue Scheduling
+A major problem with priority scheduling algorithms is `indefinite blocking`, or `starvation`.
+
+**Round-Robin Scheduling**
+
+It is similar to FCFS scheduling, but preemption is added to enable the system to switch between processes
+
+**Multilevel Queue Scheduling** 
+
+A multilevel queue scheduling algorithm partitions the ready queue into several separate queues. Each queue has **absolute** priority over lower-priority queues.
+
+![Multilevel queue scheduling.](./Assets/image_33.png)
+
+**Multilevel Feedback Queue Scheduling**
+
+Like `Multilevel Queue Scheduling` but allows a process to move between queues.
+
+In general, a multilevel feedback queue scheduler is defined by the
+following parameters:
+- The number of queues
+- The scheduling algorithm for each queue
+- The method used to determine when to upgrade a process to a higher-priority queue
+- The method used to determine when to demote a process to a lower-priority queue
+- The method used to determine which queue a process will enter when that process needs service
 
 ## Thread Scheduling
 
-### Contention Scope
+**Contention Scope**
 
-### Pthread Scheduling
+**Pthread Scheduling**
+
+The POSIX Pthread API allows specifying PCS or SCS during thread creation
+- `PTHREAD_SCOPE_PROCESS` schedules threads using PCS scheduling.
+- `PTHREAD_SCOPE_SYSTEM` schedules threads using SCS scheduling.
 
 ## Multiple-Processor Scheduling
 
-### Approaches to Multiple-Processor Scheduling
+**Approaches to Multiple-Processor Scheduling**
 
-### Processor Affinity
+**Processor Affinity**
 
-### Load Balancing
+**Load Balancing**
 
-### Multicore Processors
+**Multicore Processors**
 
 ## Real-Time CPU Scheduling
 
-### Minimizing Latency
+**Minimizing Latency**
 
-### Priority-Based Scheduling
+**Priority-Based Scheduling**
 
-### Rate-Monotonic Scheduling
+**Rate-Monotonic Scheduling**
 
-### Earliest-Deadline-First Scheduling
+**Earliest-Deadline-First Scheduling**
 
-### Proportional Share Scheduling
+**Proportional Share Scheduling**
 
-### POSIX Real-Time Scheduling
+**POSIX Real-Time Scheduling**
+
+The POSIX standard provides extensions for real-time computing
+- `SCHED FIFO`
+- `SCHED RR`
+
+[Example](./Code/Chapter_6/posixScheduleTest.c)
 
 ## Operating-System Examples
 

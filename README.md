@@ -72,6 +72,44 @@ Author: Abraham Silberschatz, Peter Baer Galvin, Greg Gagne
   - [Alternative Approaches](#alternative-approaches)
   - [Synchronization Examples](#synchronization-examples)
   - [Alternative Approaches](#alternative-approaches-1)
+- [Chapter 6](#chapter-6)
+  - [Basic Concepts](#basic-concepts)
+    - [CPU– I/O Burst Cycle](#cpu-io-burst-cycle)
+    - [CPU Schedule](#cpu-schedule)
+    - [Preemptive Scheduling](#preemptive-scheduling)
+    - [Dispatcher](#dispatcher)
+  - [Scheduling Criteria](#scheduling-criteria)
+  - [Scheduling Algorithms](#scheduling-algorithms)
+    - [First-Come, First-Served Scheduling](#first-come-first-served-scheduling)
+    - [Shortest-Job-First Scheduling](#shortest-job-first-scheduling)
+    - [Priority Scheduling](#priority-scheduling)
+    - [Round-Robin Scheduling](#round-robin-scheduling)
+    - [Multilevel Queue Scheduling](#multilevel-queue-scheduling)
+    - [Multilevel Feedback Queue Scheduling](#multilevel-feedback-queue-scheduling)
+  - [Thread Scheduling](#thread-scheduling)
+    - [Contention Scope](#contention-scope)
+    - [Pthread Scheduling](#pthread-scheduling)
+  - [Multiple-Processor Scheduling](#multiple-processor-scheduling)
+    - [Approaches to Multiple-Processor Scheduling](#approaches-to-multiple-processor-scheduling)
+    - [Processor Affinity](#processor-affinity)
+    - [Load Balancing](#load-balancing)
+    - [Multicore Processors](#multicore-processors)
+  - [Real-Time CPU Scheduling](#real-time-cpu-scheduling)
+    - [Minimizing Latency](#minimizing-latency)
+    - [Priority-Based Scheduling](#priority-based-scheduling)
+    - [Rate-Monotonic Scheduling](#rate-monotonic-scheduling)
+    - [Earliest-Deadline-First Scheduling](#earliest-deadline-first-scheduling)
+    - [Proportional Share Scheduling](#proportional-share-scheduling)
+    - [POSIX Real-Time Scheduling](#posix-real-time-scheduling)
+  - [Operating-System Examples](#operating-system-examples-1)
+    - [Linux](#linux)
+    - [Windows](#windows-1)
+    - [Solaris](#solaris)
+  - [Algorithm Evaluation](#algorithm-evaluation)
+    - [Deterministic Modeling](#deterministic-modeling)
+    - [Queueing Models](#queueing-models)
+    - [Simulation](#simulation)
+    - [Implementation](#implementation)
 
 # Chapter 1
 
@@ -275,13 +313,13 @@ Error Detection:
 **System-Oriented Services:**
 
 Resource Allocation:
-    - Distributes CPU, memory, storage, and I/O devices among multiple users or processes for efficient operation.
+  - Distributes CPU, memory, storage, and I/O devices among multiple users or processes for efficient operation.
 
 Accounting:
-    - Tracks resource usage for billing, system optimization, and statistical analysis.
+  - Tracks resource usage for billing, system optimization, and statistical analysis.
 
 Protection and Security:
-    - Controls access to system resources and safeguards against interference or unauthorized access through authentication and security mechanisms.
+  - Controls access to system resources and safeguards against interference or unauthorized access through authentication and security mechanisms.
 
 System calls can be grouped roughly into six major categories: 
 - Process control
@@ -1111,3 +1149,81 @@ revert to their original values.
 ## Synchronization Examples
 
 ## Alternative Approaches
+
+# Chapter 6
+
+## Basic Concepts
+
+### CPU– I/O Burst Cycle
+
+### CPU Schedule
+
+Short-term Schedule
+
+### Preemptive Scheduling
+
+### Dispatcher
+
+## Scheduling Criteria
+
+## Scheduling Algorithms
+
+### First-Come, First-Served Scheduling
+
+### Shortest-Job-First Scheduling
+
+### Priority Scheduling
+
+### Round-Robin Scheduling
+
+### Multilevel Queue Scheduling
+
+### Multilevel Feedback Queue Scheduling
+
+## Thread Scheduling
+
+### Contention Scope
+
+### Pthread Scheduling
+
+## Multiple-Processor Scheduling
+
+### Approaches to Multiple-Processor Scheduling
+
+### Processor Affinity
+
+### Load Balancing
+
+### Multicore Processors
+
+## Real-Time CPU Scheduling
+
+### Minimizing Latency
+
+### Priority-Based Scheduling
+
+### Rate-Monotonic Scheduling
+
+### Earliest-Deadline-First Scheduling
+
+### Proportional Share Scheduling
+
+### POSIX Real-Time Scheduling
+
+## Operating-System Examples
+
+### Linux 
+
+### Windows 
+
+### Solaris
+
+## Algorithm Evaluation
+
+### Deterministic Modeling
+
+### Queueing Models
+
+### Simulation
+
+### Implementation

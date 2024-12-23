@@ -1206,10 +1206,12 @@ using spinlocks. The kernel ensures that a thread will never be preempted while 
 
 For hread synchronization outside the kernel
 - Dispatcher objects.
+- A critical-section object 
 
 
 **Solaris:**
 - An adaptive mutex
+- turnstile
 
 **P_thread:**
 - `pthread_mutex_t`

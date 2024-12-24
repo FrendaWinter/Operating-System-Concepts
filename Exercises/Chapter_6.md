@@ -25,7 +25,10 @@ These algorithms are thus really sets of algorithms (for example, the set of RR 
 - Priority and SJF
 - Multilevel feedback queues and FCFS
 - Priority and FCFS
-d. RR and SJF
+- RR and SJF
+
+---
+
 #### 6.6 Suppose that a scheduling algorithm (at the level of short-term CPU scheduling) favors those processes that have used the least processor time in the recent past. Why will this algorithm favor I/O-bound programs and yet not permanently starve CPU-bound programs?
 
 #### 6.7 Distinguish between PCS and SCS scheduling.
@@ -39,19 +42,28 @@ where base = 60 and recent CPU usage refers to a value indicating how often a pr
 
 #### 6.10 Why is it important for the scheduler to distinguish I/O-bound programs from CPU-bound programs?
 
-I/O-bound require less CPU usage. If not schedule for I/O-bound program. It may waste the CPU time.
+I/O-bound programs spend more time waiting for I/O operations (e.g., reading from disk, network communication) than performing computations. They require less CPU time and are better served by scheduling them frequently in short bursts.
+
+- Avoid CPU idle time.
+- Improve efficient of operating system.
+
+---
 
 #### 6.11 Discuss how the following pairs of scheduling criteria conflict in certain settings.
 - CPU utilization and response time
 - Average turnaround time and maximum waiting time
 - I/O device utilization and CPU utilization
+
+---
+
 #### 6.12 One technique for implementing lottery scheduling works by assigning processes lottery tickets, which are used for allocating CPU time. Whenever a scheduling decision has to be made, a lottery ticket is chosen at random, and the process holding that ticket gets the CPU. The BTV operating system implements lottery scheduling by holding a lottery 50 times each second, with each lottery winner getting 20 milliseconds of CPU time (20 milliseconds × 50 = 1 second). Describe how the BTV scheduler can ensure that higher-priority threads receive more attention from the CPU than lower-priority threads.
-
+---
 #### 6.13 In Chapter 5, we discussed possible race conditions on various kernel data structures. Most scheduling algorithms maintain a run queue, which lists processes eligible to run on a processor. On multicore systems, there are two general options: (1) each processing core has its own run queue, or (2) a single run queue is shared by all processing cores. What are the advantages and disadvantages of each of these approaches?
-
+---
 #### 6.14 Consider the exponential average formula used to predict the length of the next CPU burst. What are the implications of assigning the following values to the parameters used by the algorithm?
+---
 #### 6.15 A variation of the round-robin scheduler is the regressive round-robin scheduler. This scheduler assigns each process a time quantum and a priority. The initial value of a time quantum is 50 milliseconds. However, every time a process has been allocated the CPU and uses its entire time quantum (does not block for I/O), 10 milliseconds is added to its time quantum, and its priority level is boosted. (The time quantum for a process can be increased to a maximum of 100 milliseconds.) When a process blocks before using its entire time quantum, its time quantum is reduced by 5 milliseconds, but its priority remains the same. What type of process (CPU-bound or I/O-bound) does the regressive round-robin scheduler favor? Explain.
-
+---
 #### 6.16 Consider the following set of processes, with the length of the CPU burst given in milliseconds:
 
 | Process | Burst Time | Priority |
@@ -125,9 +137,18 @@ this thread?
 - Both A and B are CPU-bound.
 - A is I/O-bound, and B is CPU-bound.
 - A is CPU-bound, and B is I/O-bound.
+
+---
+
 #### 6.29 Discuss ways in which the priority inversion problem could be addressed in a real-time system. Also discuss whether the solutions could be implemented within the context of a proportional share scheduler.
 #### 6.30 Under what circumstances is rate-monotonic scheduling inferior to earliest-deadline-first scheduling in meeting the deadlines associated with processes?
+
+---
+
 #### 6.31 Consider two processes, P1 and P2 , where p1 = 50, t1 = 25, p2 = 75, and t2 = 30.
 - Can these two processes be scheduled using rate-monotonic scheduling? Illustrate your answer using a Gantt chart such as the ones in Figure 6.16–Figure 6.19. 
 - Illustrate the scheduling of these two processes using earliest-deadline-first (EDF) scheduling.
+
+---
+
 #### 6.32 Explain why interrupt and dispatch latency times must be bounded in a hard real-time system.

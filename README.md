@@ -1364,3 +1364,5 @@ The POSIX standard provides extensions for real-time computing
 ### Simulation
 
 ### Implementation
+
+# Chapter 7 Deadlocks

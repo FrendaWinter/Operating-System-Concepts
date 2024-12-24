@@ -59,6 +59,8 @@ int main()
 - Second `fork();` -> 2 -> 4
 - Third `fork();` -> 4 -> 8
 
+---
+
 #### 3.3 Original versions of Apple’s mobile IOS operating system provided no means of concurrent processing. Discuss three major complications that concurrent processing adds to an operating system.
 
 - **Synchronization and Race Conditions:** When multiple processes or threads access shared resources concurrently, such as files, memory, or hardware devices, synchronization becomes critical. Without proper controls, race conditions can occur where the output or state of a resource depends on the order in which processes execute.
@@ -69,7 +71,10 @@ int main()
 
 #### 3.4 The Sun UltraSPARC processor has multiple register sets. Describe what happens when a context switch occurs if the new context is already loaded into one of the register sets. What happens if the new context is in memory rather than in a register set and all the register sets are in use? 
 
-A context switch here simply requires changing the pointer to the current register set.
+1. If the new context is already loaded in a register set: The processor simply changes the pointer to the register set associated with the new context.
+2. If the new context is in memory and all register sets are in use:
+   - Free up a register set by saving the current contents of one of the register sets (chosen by a specific policy, such as least recently used) back to memory to make space for the new context. 
+   - Once the register set is freed, the processor loads the new context from memory into the register set and updates the pointer to the newly loaded set.
 
 ---
 
@@ -142,6 +147,7 @@ int main()
     return 0;
 }
 ```
+
 ---
 
 ####  3.13 Explain the circumstances under which which the line of code marked printf("LINE J") in Figure 3.33 will be reached.
@@ -222,6 +228,83 @@ b. Automatic and explicit buffering
 c. Send by copy and send by reference
 d. Fixed-sized and variable-sized messages
 
+**a. Synchronous and Asynchronous Communication**
+
+**Synchronous Communication**
+- **Benefits**:  
+  - Easier to program and debug since communication is predictable and follows a strict sequence.  
+  - Simplifies synchronization as both sender and receiver must coordinate explicitly.  
+- **Disadvantages**:  
+  - Can cause delays, as one process may block while waiting for the other to complete.  
+  - May lead to reduced system utilization if processes spend time waiting.  
+
+**Asynchronous Communication**
+- **Benefits**:  
+  - Non-blocking, allowing processes to execute independently, which improves concurrency and system utilization.  
+  - Suitable for high-performance systems where tasks can overlap.  
+- **Disadvantages**:  
+  - More complex to implement and debug due to potential race conditions and synchronization issues.  
+  - May require additional mechanisms (e.g., callbacks or polling) to handle completion notifications.
+
+---
+
+**b. Automatic and Explicit Buffering**
+
+**Automatic Buffering**
+- **Benefits**:  
+  - Simplifies programming since the system manages buffering.  
+  - Reduces the likelihood of buffer overflow or underflow errors.  
+- **Disadvantages**:  
+  - Limited control over buffer size and management, which can lead to inefficiencies.  
+  - May introduce latency if the system delays sending data until the buffer is full.  
+
+**Explicit Buffering**
+- **Benefits**:  
+  - Provides fine-grained control over buffer size and content, allowing for optimization.  
+  - Can be tailored to specific application requirements for performance improvement.  
+- **Disadvantages**:  
+  - More complex for programmers, who must handle buffer allocation, overflow, and synchronization.  
+  - Increases the likelihood of bugs such as buffer overflows or memory leaks.  
+
+---
+
+**c. Send by Copy and Send by Reference**
+
+**Send by Copy**
+- **Benefits**:  
+  - Ensures data integrity since the receiver works with a copy, and the sender’s original data remains unaffected.  
+  - Useful for communication across different memory spaces or systems.  
+- **Disadvantages**:  
+  - Higher overhead due to copying data, especially for large messages.  
+  - Slower performance compared to send by reference.  
+
+**Send by Reference**
+- **Benefits**:  
+  - Faster as no copying is required; only a reference (e.g., pointer) is passed.  
+  - More efficient for large data sets.  
+- **Disadvantages**:  
+  - Risk of data corruption if the sender modifies the data after sending the reference.  
+  - May lead to synchronization issues, especially in multithreaded environments.  
+
+---
+
+**d. Fixed-Sized and Variable-Sized Messages**
+
+**Fixed-Sized Messages**
+- **Benefits**:  
+  - Simpler to implement and manage since all messages are of the same size.  
+  - Easier to optimize system resources, such as memory allocation and transmission.  
+- **Disadvantages**:  
+  - Can waste space if the message size exceeds the actual data size.  
+  - Limits flexibility, as applications requiring larger or dynamic messages may struggle to fit their data.  
+
+**Variable-Sized Messages**
+- **Benefits**:  
+  - More flexible and efficient as the message size can match the data size exactly.  
+  - Useful for applications with diverse data sizes (e.g., sending text strings of varying lengths).  
+- **Disadvantages**:  
+  - Harder to implement, requiring additional mechanisms to manage varying sizes (e.g., headers indicating size).  
+  - May lead to fragmentation or inefficient memory usage in the system.
 
 #### 3.19
 

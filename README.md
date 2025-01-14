@@ -1258,7 +1258,15 @@ Short-term Scheduler
 
 ### Preemptive Scheduling
 
+CPU-scheduling decisions may take place under the following four circumstances
+1. When a process switches from the `running` state to the `waiting` state (for example, as the result of an I/O request or an invocation of wait() for the termination of a child process)
+2. When a process switches from the `running` state to the `ready` state (for example, when an interrupt occurs)
+3. When a process switches from the `waiting` state to the `ready` state (for example, at completion of I/O)
+4. When a process terminates
 
+`1` and `4` A new process (if one exists in the ready queue) always be selected for execution ~ `nonpreemptive`
+
+However, in `2` and `3`, we can scheduling ~ `preemptive` ->  `race conditions`
 
 ### Dispatcher
 
@@ -1271,9 +1279,21 @@ The time it takes for the dispatcher to stop one process and start another runni
 
 ## Scheduling Criteria
 
+To comparing CPU-scheduling algorithms. We have some important criteria:
+- `CPU utilization`. We want to keep the CPU as busy as possible. Conceptually, CPU utilization can range from 0 to 100 percent. In a real system, it should range from 40 percent (for a lightly loaded system) to 90 percent (for a heavily loaded system).
+- `Throughput`. If the CPU is busy executing processes, then work is being done. One measure of work is the number of processes that are completed per time unit, called throughput. For long processes, this rate may be one process per hour; for short transactions, it may be ten processes per second.
+- `Turnaround time`. From the point of view of a particular process, the important criterion is how long it takes to execute that process. The interval from the time of submission of a process to the time of completion is the turnaround time. Turnaround time is the sum of the periods spent waiting to get into memory, waiting in the ready queue, executing on the CPU, and doing I/O.
+- `Waiting time`. The CPU-scheduling algorithm does not affect the amount of time during which a process executes or does I/O. It affects only the amount of time that a process spends waiting in the ready queue. Waiting time is the sum of the periods spent waiting in the ready queue.
+- `Response time`. In an interactive system, turnaround time may not be the best criterion. Often, a process can produce some output fairly early and can continue computing new results while previous results are being output to the user. Thus, another measure is the time from the submission of a request until the first response is produced. This measure, called response time, is the time it takes to start responding, not the time it takes to output the response. The turnaround time is generally limited by the speed of the output device
+
 ## Scheduling Algorithms
 
 **First-Come, First-Served Scheduling**
+
+- The average waiting time under the `FCFS` policy is often quite long.
+- One more problem for `FCFS` is we have CPU-bound process and I/O-bound processes:
+  - CPU-bound process will get and hold the CPU.
+  - I/O-bound process will have to wait for CPU and the I/O devices are idle.
 
 **Shortest-Job-First Scheduling**
 
@@ -1310,6 +1330,10 @@ following parameters:
 ## Thread Scheduling
 
 **Contention Scope**
+- Process-contention scope (`PCS`)
+  - The thread library schedules user-level threads to run on an available `LWP`.
+  - `PCS` is done according to priority—the scheduler selects the runnable thread with the highest priority to run.
+- System-contention scope (`SCS`)
 
 **Pthread Scheduling**
 
@@ -1321,11 +1345,42 @@ The POSIX Pthread API allows specifying PCS or SCS during thread creation
 
 **Approaches to Multiple-Processor Scheduling**
 
+We can use a single processor ~ the master server to scheduling decisions, I/O processing, and other system activities
+  - This `asymmetric multiprocessing` is simple because only one processor accesses the system data structures, reducing the need for data sharing.
+
+A second approach uses `symmetric multiprocessing` (`SMP`) ~ where each
+processor is self-scheduling
+
 **Processor Affinity**
+
+Because of the high cost of **invalidating** and **repopulating caches**, most `SMP` systems try to avoid migration of processes from one processor to another and instead attempt to keep a process running on the same processor. This is known as `processor affinity`
+
+Processor affinity takes several forms:
+- `soft affinity` ~ not guaranteeing to keep a process running on the same processor
+- `hard affinity` ~ allowing a process to specify a subset of processors on which it may run.
 
 **Load Balancing**
 
+On `SMP` systems, it is important to keep the workload balanced among all processors to fully utilize the benefits of having more than one processor.
+
+There are two general approaches to load balancing: 
+- `push migration` ~ a specific task periodically checks the load on each processor and push processes from overloaded to idle or less-busy
+processors
+- `pull migration` ~ when an idle processor pulls a waiting task
+from a busy processor
+
 **Multicore Processors**
+
+Multicore processor: multiple processor cores on the same physical chip.
+
+`memory stall` when a processor accesses memory, it spends a significant amount of time waiting for the data to become available.
+
+Many recent hardware designs have implemented multithreaded processor cores in which two (or more) hardware threads are assigned to each core
+- That way, if one thread stalls while waiting for memory, the core can switch to another thread.
+
+In general, there are two ways to multithread a processing core: 
+- Coarse-grained: a thread executes on a processor until a long-latency event such as a `memory stall` occur.
+- Fine-grained multithreading: switches between threads at a much finer level of granularity, typically at the boundary of an instruction cycle.
 
 ## Real-Time CPU Scheduling
 

@@ -1384,13 +1384,40 @@ In general, there are two ways to multithread a processing core:
 
 ## Real-Time CPU Scheduling
 
+CPU scheduling for real-time operating systems
+- `Soft real-time systems`
+  - No guarantee as to when a critical real-time process will be scheduled.
+  - Guarantee only that the process will be given preference over noncritical processes.
+- `Hard real-time systems` ~ stricter requirements
+  - A task must be serviced by its deadline;
+  - Service after the deadline has expired is the same as no service at all.
+
 **Minimizing Latency**
+
+Two types of latencies affect the performance of real-time systems:
+1. Interrupt latency ~ the period of time that services the changing interrupt
+2. Dispatch latency ~ The amount of time required for the scheduling dispatcher to stop one process and start another
+   1. The most effective technique for keeping dispatch latency low is to provide preemptive kernels.
+
+![Interrupt latency.](./Assets/image_34.png)
+![Dispatch latency.](./Assets/image_35.png)
 
 **Priority-Based Scheduling**
 
+The scheduler for a real-time operating system must support a priority-based algorithm with preemption. Because it require CPU respond immediately when real-time process need CPU.
+
+Some characteristics of the processes need to know:
+- `periodic` ~ They require the CPU at constant intervals (periods).
+- `rate` ~ The rate of a periodic task.
+
 **Rate-Monotonic Scheduling**
 
+A scheduling algorithm schedules periodic tasks using a static priority policy with preemption
+
 **Earliest-Deadline-First Scheduling**
+Scheduling dynamically assigns priorities according to deadline. 
+- The earlier the deadline, the higher the priority.
+- The later the deadline, the lower the priority.
 
 **Proportional Share Scheduling**
 

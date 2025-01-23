@@ -1421,25 +1421,82 @@ Scheduling dynamically assigns priorities according to deadline.
 
 **Proportional Share Scheduling**
 
+Proportional share schedulers operate by allocating T shares among all applications. An application can receive N shares of time, thus ensuring that the application will have `N/T` of the total processor time
+
+- A is assigned 50 shares ~ A will have 50 percent of total processor time
+- B is assigned 15 shares ~ B will have 15 percent
+- C is assigned 20 shares ~ C will have 20 percent
+
+
 **POSIX Real-Time Scheduling**
 
 The POSIX standard provides extensions for real-time computing
-- `SCHED FIFO`
-- `SCHED RR`
+- `SCHED_FIFO` ~ schedules threads according to a first-come, first-served policy
+- `SCHED_RR` ~ Round-robin policy
 
 [Example](./Code/Chapter_6/posixScheduleTest.c)
 
 ## Operating-System Examples
 
-### Linux 
+### Linux
 
-### Windows 
+[Example](./Code/Chapter_6/posixRealTimeSche.c)
+
+Scheduling in the Linux system is based on **scheduling classes**. 
+- Each class is assigned a specific priority. 
+- By using different scheduling classes, the kernel can accommodate different scheduling algorithms based on the needs of the system and its processes.
+
+### Windows
+
+Windows schedules threads using a **priority-based**, preemptive scheduling algorithm. The Windows scheduler ensures that the highest-priority thread will always run
+
+The **dispatcher** is handle scheduling 
+
+A thread selected to run by the dispatcher will run:
+- Until it is preempted by a higher-priority thread.
+- Until it terminates, until its time quantum ends.
+- Until it calls a blocking system call, such as for I/O.
+
+The dispatcher uses a `32-level` priority scheme to determine the order of thread execution. Priorities are divided into two classes. 
+- The **variable class** contains threads having priorities from 1 to 15
+- The **real-time class** contains threads with priorities ranging from 16 to 31.
+- A thread running at priority 0 that is used for memory management
+
+The dispatcher uses a queue for each scheduling priority and traverses the set of queues from highest to lowest until it finds a thread that is ready to run. 
+- If no ready thread is found, the dispatcher will execute a special thread called the **idle thread**.
+
+The Windows API identifies the following six priority classes and their equivalent priorities:
+
+- IDLE PRIORITY CLASS - IDLE, LOWEST
+- BELOW NORMAL PRIORITY CLASS - BELOW NORMAL
+- NORMAL PRIORITY CLASS - NORMAL
+- ABOVE NORMAL PRIORITY CLASS - ABOVE NORMAL
+- HIGH PRIORITY CLASS - HIGHEST
+- REALTIME PRIORITY CLASS - TIME CRITICAL
+
+Windows 7 introduced `user-mode scheduling (UMS)`, which allows applications to create and manage threads independently of the kernel
+- We can use `Concurrency Runtime ( ConcRT )`, a concurrent programming framework for C++ that is designed for task-based parallelism
 
 ### Solaris
 
+Solaris uses priority-based thread scheduling. Each thread belongs to one of six classes:
+1. Time sharing (TS)
+2. Interactive (IA)
+3. Real time ( RT )
+4. System (SYS)
+5. Fair share (FSS)
+6. Fixed priority (FP)
+
 ## Algorithm Evaluation
 
+How we select a CPU-scheduling algorithm for a particular system.
+
 ### Deterministic Modeling
+
+**Analytic evaluation** uses the given algorithm and the system workload to produce a formula or number to evaluate the performance of the algorithm for that workload.
+
+**Deterministic modeling** is one type of analytic evaluation. 
+- This method takes a particular predetermined workload and defines the performance of each algorithm for that workload.
 
 ### Queueing Models
 

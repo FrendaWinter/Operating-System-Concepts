@@ -1556,4 +1556,131 @@ Scenerio:
     - One protocol that we can use requires each process to request and be allocated all its resources before it begins execution
     - An alternative protocol allows a process to request resources only when it has none.
 - **No premetive**
+  - If a process is holding some resources and requests another resource that cannot be immediately allocated to it (that is, the process must wait), then all resources the process is currently holding are preempted. In other words, these resources are implicitly released. 
 - **Circular wait**
+  - Impose a total ordering of all resource types and to require that each process requests resources in an increasing order of enumeration.
+
+## Deadlock prevention
+
+### **Safe state**: 
+
+A state is safe if the system can allocate resources to each process (up to its maximum) in some order and still avoid a deadlock
+- A safe sequence is an order in which processes can execute safely, meaning each process can get the resources it needs and complete.
+- If a process doesn’t immediately get what it needs, it can wait until other processes finish and release resources.
+- If there is no safe sequence, the system is unsafe, meaning a deadlock might happen (but not always).
+
+**Example:**`
+
+Imagine three processes (P1, P2, P3) and some available resources.
+
+- P1 needs 3 more units but has 2.
+- P2 needs 2 more but has 1.
+- P3 needs 1 more but has 1.
+
+If the system has only 1 available unit, we can complete P3 first since it only needs 1.
+
+- P3 finishes, releases its resources → System has more resources.
+- Now P2 can get what it needs, finish, and release resources.
+- Finally, P1 gets what it needs and completes.
+
+Since we found a way to complete all processes, the system is in a **safe state**. But if no such order exists, it’s unsafe and could lead to deadlock
+
+### **Resource-Allocation-Graph Algorithm**:
+
+We use graph to visualize the relationship between process and resources.
+- A claim edge Pi → Rj indicates that process Pi may request resource Rj at some time in the future.
+
+![Claim edge](./Assets/image_38.png)
+
+We check for safety by using a cycle-detection algorithm. An algorithm for detecting a cycle in this graph requires an order of n^2 operations, where n is the number of processes in the system.
+- If no cycle exists, then the allocation of the resource in a safe state.
+- If a cycle is found, then the allocation will put the system in an unsafe state.
+
+The resource-allocation-graph algorithm is not applicable to a resource allocation system with multiple instances of each resource type
+
+### **Banker's Algorithm**:
+
+When a new process enters the system, it must declare the maximum number of instances of each resource type that it may need.
+
+This number may not exceed the total number of resources in the system. When a user requests a set of resources, the system must determine whether the allocation of these resources will leave the system in a safe state.
+- If it will, the resources are allocated; otherwise, the process must wait until some other process releases enough resources.
+
+
+**Data structures for the banker’s algorithm.**
+- **Available**. A vector of length m indicates the number of available resources of each type. If Available[j] equals k, then k instances of resource type Rj are available.
+- **Max**. An `n × m` matrix defines the maximum demand of each process. If `Max[i][j]` equals k, then process Pi may request at most k instances of resource type Rj.
+- **Allocation**. An `n × m` matrix defines the number of resources of each type currently allocated to each process. If Allocation[i][j] equals k, then process `Pi` is currently allocated k instances of resource type Rj.
+- **Need.** An `n × m` matrix indicates the remaining resource need of each process. If `Need[i][j]` equals `k`, then process Pi may need k more instances of resource type Rj to complete its task. Note that `Need[i][j]` equals `Max[i][j]` − `Allocation[i][j]`.
+
+#### Safety algorithm
+
+The algorithm for finding out whether or not a system is in a safe state. 
+- Let `Work` and `Finish` be vectors of length m and n, respectively. Initialize `Work` = `Available` and `Finish[i]` = *false* for i = 0, 1, ..., n − 1.
+- Find an index i such that both
+  - `Finish[i]` == *false*
+  - `Need[i]` ≤ `Work`
+  - If no such i exists, go to step 4.
+3. `Work` = `Work` + `Allocation[i]`
+  - `Finish[i]` = true
+  - Go to step 2.
+4. If `Finish[i]` == **true** for all i, then the system is in a safe state.
+
+#### Resource-Request Algorithm
+
+The **Resource-Request Algorithm** determines whether a request for resources can be safely granted. It follows these steps:
+
+1. **Check Maximum Claim:**  
+   - If `Request[i] ≤ Need[i]`, proceed to step 2.  
+   - Otherwise, raise an error because the process exceeds its maximum claim.
+
+2. **Check Availability:**  
+   - If `Request[i] ≤ Available`, proceed to step 3.  
+   - Otherwise, process `Pi` must wait since resources are unavailable.
+
+3. **Simulate Allocation:**  
+   - Temporarily allocate resources by updating:  
+     ```
+     Available = Available - Requesti
+     Allocationi = Allocationi + Requesti
+     Needi = Needi - Requesti
+     ```
+   - Check if the new resource allocation state is **safe**:
+     - If **safe**, grant the request and complete the transaction.  
+     - If **unsafe**, process `Pi` must wait, and the previous state is restored.
+
+## Deadlock detection.
+
+**Single Instance of Each Resource Type**:
+A deadlock exists in this system if and only if the graph contains a cycle. To detect deadlocks, the system needs to maintain the graph and periodically invoke an algorithm that searches for a cycle in the graph.
+
+
+**Several Instances of a Resource Type**:
+- Let `Work` and `Finish` be vectors of length m and n, respectively. Initialize `Work` = `Available`. For i = 0, 1, ..., n–1, if `Allocation[i]` != 0, then `Finish[i]` = *false*. Otherwise, `Finish[i]` = *true*.
+- Find an index i such that both
+  - Finish[i] == false
+  - Request[i] ≤ Work
+  - If no such i exists, go to step 4.
+- Work = Work + Allocation[i]
+  - Finish[i] = true
+  - Go to step 2.
+- If `Finish[i]` == false for some i, 0 ≤ i < n, then the system is in a deadlocked state. Moreover, if `Finish[i]` == *false*, then process Pi is deadlocked.
+
+### **Detection-Algorithm Usage**:
+When should we invoke the detection algorithm? The answer depends on two factors:
+1. How often is a deadlock likely to occur?
+2. How many processes will be affected by deadlock when it happens?
+
+## Recovery from deadlock
+
+**Process Termination**:
+- Abort all deadlocked processes.
+- Abort one process at a time until the deadlock cycle is eliminated.
+
+**Resource Preemption**: we preempt some resources from processes and give these resources to other processes until the deadlock cycle is broken.
+
+There are three issues need to be addressed before the preemption:
+- **Select the victim**: We need to choose process that minimize the cost.
+- **Roll back**: When we preempt the resource, process cannot continue with its normal execution; it is missing some needed resource.
+  - We must roll back the process to some safe state and restart it from that state.
+- **Starvation**: May happen that the same process is always picked as a victim (Follow on cost factor for exam), so the process will never complete the task.
+  - So we icked as a victim only a (small) finite number of times. The most common solution is to include the number of rollbacks in the cost factor.

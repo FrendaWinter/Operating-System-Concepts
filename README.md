@@ -1500,8 +1500,60 @@ How we select a CPU-scheduling algorithm for a particular system.
 
 ### Queueing Models
 
+The computer system is described as a network of servers. Each server has
+a queue of waiting processes. The CPU is a server with its ready queue, as is the I/O system with its device queues. Knowing arrival rates and service rates, we can compute utilization, average queue length, average wait time, and so on. This area of study is called queueing-network analysis.
+
 ### Simulation
+
+![Simulation](./Assets/image_36.png)
+
+Simulations can be expensive. A more detailed simulation provides more accurate results, but it also takes more computer time. 
 
 ### Implementation
 
+The only completely accurate way to evaluate a scheduling algorithm is to code it up, put it in the operating system, and see how it works. This approach puts the actual algorithm in the real system for evaluation under real operating conditions.
+
 # Chapter 7 Deadlocks
+
+Perhaps the best illustration of a deadlock can be drawn from a law passed by the Kansas legislature early in the 20th century. It said, in part: “When two trains approach each other at a crossing, both shall come to a full stop and neither shall start up again until the other has gone.”
+
+## System model
+A system consists of a finite number of resources to be distributed among a number of competing processes.
+- CPU cycles, files, and I/O devices (such as printers and DVD drives) are examples of resource types.
+- Each resource types consisting of some number of identical instances. If a system has two CPUs, then the resource type CPU has two instances.
+
+## Deadlock Characterization
+
+A deadlock situation can arise if the following four conditions hold simultaneously in a system:
+1. **Mutual exclusion**. At least one resource must be held in a nonsharable mode; that is, only one process at a time can use the resource. If another process requests that resource, the requesting process must be delayed until the resource has been released.
+2. **Hold and wait**. A process must be holding at least one resource and waiting to acquire additional resources that are currently being held by other processes.
+3. **No preemption**. Resources cannot be preempted; that is, a resource can be released only voluntarily by the process holding it, after that process has completed its task.
+4. **Circular wait.** A set {P0 , P1 , ..., Pn} of waiting processes must exist such that P0 is waiting for a resource held by P1 , P1 is waiting for a resource held by P2 , ..., Pn−1 is waiting for a resource held by Pn, and Pn is waiting for a resource held by P0 .
+
+**Graph**
+
+P = {P1 , P2 , ..., Pn}, the set consisting of all the active processes in the system, and R = {R1 , R2 , ..., Rm}, the set consisting of all resource types in the system.
+Dots represent a instant of the resource type.
+
+The arrow indicate the relationship between process and resource:
+- Process hell instant of resource (R -> P)
+- Process waiting for instant of resource (P -> R)
+
+![Graph](./Assets/image_37.png)
+
+Generally speaking, we can deal with the deadlock problem in one of three ways:
+- We can use a protocol to prevent or avoid deadlocks, ensuring that the system will never enter a deadlocked state.
+- We can allow the system to enter a deadlocked state, detect it, and recover.
+- We can ignore the problem altogether and pretend that deadlocks never occur in the system.
+
+## Deadlock prevention
+
+Scenerio:
+- **Mutex Exclusion**
+  - Provide share resource but mutex lock cannot be simultlaneously shared by several process
+- **Hold and wait**
+  - Whenever a process requests a resource, it does not hold any other resources
+    - One protocol that we can use requires each process to request and be allocated all its resources before it begins execution
+    - An alternative protocol allows a process to request resources only when it has none.
+- **No premetive**
+- **Circular wait**

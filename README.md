@@ -1867,11 +1867,26 @@ On a Linux system, the page size varies according to architecture, and there are
 - One approach is to use the getpagesize() system call. 
 - Another strategy is command line: `getconf PAGESIZE`
 
+Every logical address is bound by the paging hardware to some physical address. Using paging is similar to using a table of base (or relocation) registers, one for each frame of memory.
+
+**Protection**
+
+![Bit protection](./Assets/image_54.png)
+
+
+**Page sharing**  
+
+An advantage of paging is the possibility of sharing common code.
+
+Example: If we have 8 users, all run the same editor, we not need 8 instance of code in the memory
+
 ## Structure of page table 
 
 **Hierarchical Paging**
 
 The page table itself can becomes excessively large. ->  One way is to use a two-level paging algorithm, in which the page table itself is also paged.
+
+![Hierarchical page](./Assets/image_50.png)
 
 **Hashed Page Tables**
 
@@ -1883,12 +1898,52 @@ The virtual page number is compared with field 1 in the first element in the lin
 - If there is a match, the corresponding page frame (field 2) is used to form the desired physical address.
 - If there is no match, subsequent entries in the linked list are searched for a matching virtual page number. 
 
+![Hash page table](./Assets/image_51.png)
+
 **Inverted Page Tables**
 
+![Inverted page table](./Assets/image_49.png)
+
 **Oracle SPARC Solaris**
+
+There are two hash tables—one for the kernel and one for all user processes. Each maps memory addresses from virtual to physical memory. Each hash-table entry represents a contiguous area of mapped virtual memory, which is more efficient than having a separate hash-table entry for each page. Each entry has a base address and a span indicating the number of pages the entry represents
 
 ## Example
 
 # Chapter 9
 
 Virtual memory is a technique that allows the execution of processes that are not completely in memory
+
+**Background**:
+- Some part of programs almost never exectued. Like error handling or certain options
+- Arrays, lists, and tables are often allocated more memory than they actually need.
+
+Even in those cases where the entire program is needed, it may not all be needed at the same time.
+
+The ability to execute a program that is only partially in memory would confer many benefits
+
+Virtual memory involves the separation of logical memory as perceived by users from physical memory. This separation allows an extremely large virtual memory to be provided for programmers when only a smaller physical memory is available
+
+![Virtual address space](./Assets/image_52.png)
+
+## Demand paging 
+
+With demand-paged virtual memory, pages are loaded only when they are demanded during program execution. Pages that are never accessed are thus never loaded into physical memory.
+
+Rather than swapping the entire process into memory, though, we use a lazy swapper. A lazy swapper never swaps a page into memory unless that page will be needed. 
+
+We call this swapper for page is **pager** for more technical correction.
+
+**How?**
+
+When a process is to be swapped in, the pager guesses which pages will be used before the process is swapped out again.
+  - Instead of swapping in a whole process, the pager brings only those pages into memory.
+
+![Page fault](./Assets/image_53.png)
+
+1. We check an internal table (usually kept with the process control block) for this process to determine whether the reference was a valid or an invalid memory access.
+2. If the reference was invalid, we terminate the process. If it was valid but we have not yet brought in that page, we now page it in.
+3. We find a free frame (by taking one from the free-frame list, for example).
+4. We schedule a disk operation to read the desired page into the newly allocated frame.
+5. When the disk read is complete, we modify the internal table kept with the process and the page table to indicate that the page is now in memory.
+6. We restart the instruction that was interrupted by the trap. The process can now access the page as though it had always been in memory.

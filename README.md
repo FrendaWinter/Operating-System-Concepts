@@ -1689,7 +1689,7 @@ There are three issues need to be addressed before the preemption:
 - **Roll back**: When we preempt the resource, process cannot continue with its normal execution; it is missing some needed resource.
   - We must roll back the process to some safe state and restart it from that state.
 - **Starvation**: May happen that the same process is always picked as a victim (Follow on cost factor for exam), so the process will never complete the task.
-  - So we icked as a victim only a (small) finite number of times. The most common solution is to include the number of rollbacks in the cost factor.
+  - So we picked as a victim only a (small) finite number of times. The most common solution is to include the number of rollbacks in the cost factor.
 
 # Chapter 8
 

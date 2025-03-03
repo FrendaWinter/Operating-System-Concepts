@@ -1975,3 +1975,17 @@ The page fault causes the following sequence to occur:
 11. Wait for the CPU to be allocated to this process again.
 
 ## Copy on write
+
+With `fork()`, child process being created by duplicate the parent process, for paging, copy whole paging of the parent process is not necessary.
+
+Instead, we can use a technique known as **copy-on-write**, which works by allowing the parent and child processes initially to share the same pages. These shared pages are marked as copy-on-write pages, meaning that if either process writes to a shared page, a copy of the shared page is created.
+
+![Copy on write](./Assets/image_55.png)
+
+Several versions of UNIX (including Solaris and Linux) provide a variation of the `fork()` system call `vfork()` ~ virtual memory fork - Differnet with `fork()` on copy-on-write
+
+With `vfork()`:
+- Parent process is suppended
+- Child process use address space of the parent
+  - Any change make by child process will be reflect when parent resume
+  - Use with caution.

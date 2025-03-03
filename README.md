@@ -1947,3 +1947,31 @@ When a process is to be swapped in, the pager guesses which pages will be used b
 4. We schedule a disk operation to read the desired page into the newly allocated frame.
 5. When the disk read is complete, we modify the internal table kept with the process and the page table to indicate that the page is now in memory.
 6. We restart the instruction that was interrupted by the trap. The process can now access the page as though it had always been in memory.
+
+**Pure demand paging**: Never bring a page into memory until it is require
+
+The hardware to support demand paging is the same as the hardware for paging and swapping:
+- **Page table.** This table has the ability to mark an entry invalid through a valid–invalid bit or a special value of protection bits.
+- **Secondary memory.** This memory holds those pages that are not present in main memory. The secondary memory is usually a high-speed disk. It is known as the swap device, and the section of disk used for this purpose is known as swap space.
+
+A crucial requirement for demand paging is the ability to restart any instruction after a page fault. We must be able to restart the process in exactly the same place and state, except that the desired page is now in memory and is accessible
+
+**Performenace**:
+
+The page fault causes the following sequence to occur:
+1. Trap to the operating system.
+2. Save the user registers and process state.
+3. Determine that the interrupt was a page fault.
+4. Check that the page reference was legal and determine the location of the page on the disk.
+5. Issue a read from the disk to a free frame:
+    - Wait in a queue for this device until the read request is serviced.
+    - Wait for the device seek and/or latency time.
+    - Begin the transfer of the page to a free frame.
+6. While waiting, allocate the CPU to some other user ( CPU scheduling, optional).
+7. Receive an interrupt from the disk I/O subsystem (I/O completed).
+8. Save the registers and process state for the other user (if step 6 is executed).
+9. Determine that the interrupt was from the disk.
+10. Correct the page table and other tables to show that the desired page is now in memory.
+11. Wait for the CPU to be allocated to this process again.
+
+## Copy on write

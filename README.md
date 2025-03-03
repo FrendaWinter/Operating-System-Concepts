@@ -112,10 +112,19 @@ Author: Abraham Silberschatz, Peter Baer Galvin, Greg Gagne
     - [Dynamic Linking and Shared Libraries.](#dynamic-linking-and-shared-libraries)
   - [Swapping](#swapping)
   - [Contiguous memory allocation](#contiguous-memory-allocation)
+    - [**Memory allocation**:](#memory-allocation)
   - [Segmentation](#segmentation)
   - [Paging](#paging)
   - [Structure of page table](#structure-of-page-table)
   - [Example](#example)
+- [Chapter 9](#chapter-9)
+  - [Demand paging](#demand-paging)
+  - [Copy on write](#copy-on-write)
+  - [Page replacement](#page-replacement)
+    - [Basic page replacement](#basic-page-replacement)
+      - [FIFO](#fifo)
+      - [Optimal Page Replacement (OPT)](#optimal-page-replacement-opt)
+      - [LRU (Least Recently Used)](#lru-least-recently-used)
 
 # Chapter 1
 
@@ -1956,7 +1965,7 @@ The hardware to support demand paging is the same as the hardware for paging and
 
 A crucial requirement for demand paging is the ability to restart any instruction after a page fault. We must be able to restart the process in exactly the same place and state, except that the desired page is now in memory and is accessible
 
-**Performenace**:
+**Performance**:
 
 The page fault causes the following sequence to occur:
 1. Trap to the operating system.
@@ -1985,7 +1994,70 @@ Instead, we can use a technique known as **copy-on-write**, which works by allow
 Several versions of UNIX (including Solaris and Linux) provide a variation of the `fork()` system call `vfork()` ~ virtual memory fork - Differnet with `fork()` on copy-on-write
 
 With `vfork()`:
-- Parent process is suppended
+- Parent process is suspended
 - Child process use address space of the parent
-  - Any change make by child process will be reflect when parent resume
+  - Any change make by child process will be reflect when the parent process resume
   - Use with caution.
+- Because no copying of pages takes place, `vfork()` is an extremely efficient method of process creation
+
+## Page replacement
+
+Page Replacement in an operating system is the process of selecting which memory pages to swap out (remove) from RAM when a new page needs to be loaded but there is no free space available. It occurs in virtual memory systems where processes use more memory than physically available RAM, requiring pages to be swapped between RAM and disk.
+
+Why is Page Replacement Needed?
+- When a process requests a page that is not currently in RAM (a page fault occurs), the OS must load that page from disk.
+- If RAM is full, the OS must decide which page to remove to make room for the new page.
+- The goal is to minimize page faults and optimize system performance.
+
+Key Performance Metrics
+- Page Fault Rate: The lower, the better.
+- Execution Time: Efficient algorithms minimize swapping delays.
+- Overhead: The algorithm should not require excessive bookkeeping.
+
+We must solve two major problems to implement demand paging:
+- A frame-allocation algorithm 
+- A page-replacement algorithm
+
+How we can choose best page-replacement algorithm?
+
+We evaluate an algorithm by running it on a particular string of memory references and computing the number of page faults. The string of memory references is called a reference string.
+
+### Basic page replacement
+
+If no frame is free, we find one that is not currently being used and free it.
+
+We can use the `modify bit` to determines whether we need to write the page back to disk before removing it.
+
+- If the modify bit is set (page is dirty)
+  - The page has changed since it was loaded from disk.
+  - Before replacing it, we must write it back to disk so that the changes are not lost
+- If the modify bit is NOT set (page is clean)
+  - The page in RAM is the same as the version on disk.
+  - We can simply discard it and load a new page without writing it back, saving disk I/O.
+
+**Belady’s anomaly:** for some page-replacement algorithms, the page-fault rate may increase as the number of allocated frames increases (Increase RAM)
+#### FIFO
+
+- FIFO (First-In-First-Out)
+  - The oldest page in memory is replaced.
+  - Simple but inefficient, as old pages might still be useful 
+
+![FIFO](./Assets/image_56.png)
+
+#### Optimal Page Replacement (OPT)
+  - Replaces the page that will not be used for the longest time in the future.
+  - Ideal but impractical, as future memory access patterns are unknown 
+
+#### LRU (Least Recently Used)
+  - The page that has not been used for the longest time is replaced.
+  - More efficient than FIFO but requires tracking page usage 
+
+**Counters**: In the simplest case, we associate with each page-table entry a time-of-use field and add to the CPU a logical clock or counter.
+  - The clock is incremented for every memory reference.
+
+**Stack**: Approach to implementing LRU replacement is to keep a stack of page numbers. 
+- Whenever a page is referenced, it is removed from the stack and put on the top.
+  - The most recently used page is always at the top of the stack
+  - The least recently used page is always at the bottom
+
+LRU-Approximation Page Replacement:

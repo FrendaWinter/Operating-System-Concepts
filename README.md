@@ -2060,4 +2060,58 @@ We can use the `modify bit` to determines whether we need to write the page back
   - The most recently used page is always at the top of the stack
   - The least recently used page is always at the bottom
 
-LRU-Approximation Page Replacement:
+**LRU-Approximation Page Replacement:**
+
+Some system approach LRU with much simple solution (reduce the cost of complex structure)
+- *Referent bit*: The referent bit for a page is set by the hardware whenever that page is referenced.
+- Use referent bit is basic approach so we do not know the orders os use.
+
+Some approach using LRU-Approximation:
+- **Additional-Reference-Bits Algorithm:** We use more bit, up to 8-bit
+  - The operating system shifts the reference bit for each page into the high-order bit of its 8-bit byte
+  - The page with the lowest number is the LRU page, and it can be replaced.
+  - If many page are equal, we use FIFO to choose among them.
+- **Second-Chance Algorithm:** When a page has been selected, however, we inspect its reference bit.
+  - If the value is 0, we proceed to replace this page
+  - But if the reference bit is set to 1, we give the page a second chance and move on to select the next FIFO page. 
+  - When a page gets a second chance, its reference bit is cleared, and its arrival time is reset to the current time -> Thus, a page that is given a second chance will not be replaced until all other pages have been replaced.
+- **Enhanced second-chance**: We use **modify bit** + **referent bit**
+  - `(0, 0)` neither recently used nor modified—best page to replace
+  - `(0, 1)` not recently used but modified—not quite as good, because the page will need to be written out before replacement
+  - `(1, 0)` recently used but clean—probably will be used again soon
+  - `(1, 1)` recently used and modified—probably will be used again soon, and the page will be need to be written out to disk before it can be replaced
+
+#### Counting-Based Page Replacement
+#### Page-Buffering Algorithms
+#### Applications and Page Replacement
+
+## Allocation of Frames
+
+We can keep a counter of the number of references that have been made to each page and develop the following two schemes.
+- The least frequently used (LFU)
+- The most frequently used (MFU)
+
+## Thrashing
+
+If process doesn't have enough frames it needs to support pages in active use, it will quickly page-fault. 
+
+However, since all its pages are in active use, it must replace a page that will be needed again right away. Consequently, it quickly faults again, and again, and again, replacing pages that it must bring back in immediately
+
+This high paging activity is called thrashing. A process is thrashing if it is spending more time paging than executing
+
+## Memory-mapped file
+
+When request for I/O acessing on file. We can use the virtual memory techniques to treat file I/O as routine memory accesses. This approach, known as memory mapping a file, allows a part of the virtual address space to be logically associated with the file. 
+
+**How?**
+
+1. We mapping disk block to a page in the memory. The inital access will result in page fault.
+2. A page-sized portion of the file is read from the file system into a physical page 
+3. Subsequent reads and writes to the file are handled as routine memory accesses
+    - The file on disk maybe not change until OS decide to write back from memory to the disk.
+
+Some OS provide memory mapping only through a specific system call and use the standard system calls to perform all other file I/O.
+
+Multiple processes may be allowed to map the same file concurrently, to allow sharing of data.
+
+## Allocating kernel memory

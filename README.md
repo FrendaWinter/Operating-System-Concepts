@@ -125,6 +125,13 @@ Author: Abraham Silberschatz, Peter Baer Galvin, Greg Gagne
       - [FIFO](#fifo)
       - [Optimal Page Replacement (OPT)](#optimal-page-replacement-opt)
       - [LRU (Least Recently Used)](#lru-least-recently-used)
+      - [Counting-Based Page Replacement](#counting-based-page-replacement)
+      - [Page-Buffering Algorithms](#page-buffering-algorithms)
+      - [Applications and Page Replacement](#applications-and-page-replacement)
+  - [Allocation of Frames](#allocation-of-frames)
+  - [Thrashing](#thrashing)
+  - [Memory-mapped file](#memory-mapped-file)
+  - [Allocating kernel memory](#allocating-kernel-memory)
 
 # Chapter 1
 
@@ -411,14 +418,13 @@ Categories:
 Along with system programs, most operating systems are supplied with programs that are useful in solving common problems or performing common operations. Such application programs include Web browsers, word processors and text formatters, spreadsheets, database systems, compilers, plotting and statistical-analysis packages, and games.
 
 ### Design Goals
+- user goals
+- system goals
 
-user goals
-system goals
-
-Mechanisms and Policies
+**Mechanisms and Policies:**
 
 One important principle is the separation of policy from mechanism. 
-Mechanisms determine how to do something; policies determine what will be done.
+- Mechanisms determine how to do something; policies determine what will be done.
 
 For example, the timer construct is a mechanism for ensuring CPU protection, 
 but deciding how long the timer is to be set for a particular user is a policy decision.

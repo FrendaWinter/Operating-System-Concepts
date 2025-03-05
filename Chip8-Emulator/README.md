@@ -2,7 +2,7 @@
 
 Ref: https://austinmorlan.com/posts/chip8_emulator/
 
-Ref: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
+Instruction ref: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
 
 How stack work?
 
@@ -27,3 +27,23 @@ $20E: LD V4, $4
 - $20C: RET       -> PC += 2 = $20E | SP = 0 | --SP = 0 and Pull $202 from stack[0] | PC = $202 | Next cycle at PC = $202
 - $202: JMP $20E  -> PC += 2 = $204 | SP = 0 | Do not modify stack or SP            | PC = $204 | Next cycle at PC = $204
 - $20E: LD V4, $4 -> PC += 2 = $210 | SP = 0 | Do not modify stack or SP            | PC = $210 | Next cycle at PC = $210
+
+
+**Chip 8 have:**
+- 16 8-bit Registers (labeled `V0` to `VF`)
+- 4K Bytes of Memory
+  - `0x000-0x1FF`: Originally reserved for the CHIP-8 interpreter, but in our modern emulator we will just never write to or read from that area.
+  - `0x050-0x0A0`: Storage space for the 16 built-in characters (0 through F), which we will need to manually put into our memory because ROMs will be looking for those characters.
+  - `0x200-0xFFF`: Instructions from the ROM will be stored starting at `0x200`, and anything left after the ROM’s space is free to use.
+- 16-bit Index Register: A special register used to store memory addresses for use in operations.
+- 16-bit Program Counter
+- 16-level Stack
+- 8-bit Stack Pointer
+- 8-bit Delay Timer
+- 8-bit Sound Timer
+- 16 Input Keys
+- `64x32` Monochrome Display Memory
+
+[Code](https://github.com/JamesGriffin/CHIP-8-Emulator/tree/master)
+
+Can write code with octo [Octo](https://github.com/JohnEarnest/Octo)

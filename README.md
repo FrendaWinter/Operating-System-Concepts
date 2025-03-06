@@ -188,31 +188,31 @@ A bit, called the `mode bit`, is added to the hardware of the computer to indica
 
 ![Transition from user to kernel mode](./Assets/image_5.png)
 
-There can be more than 2 modes:
+**There can be more than 2 modes:**
 - Intel processors have four separate protection rings
 - ARMv8 systems have seven modes
 - CPUs that support virtualization frequently have a separate mode to indicate when the virtual machine manager (VMM) is in control of the system.
 
-The operating system is responsible for the following activities in connection with process management:
+**The operating system is responsible for the following activities in connection with process management:**
 - Creating and deleting both user and system processes
 - Scheduling processes and threads on the CPUs
 - Suspending and resuming processes
 - Providing mechanisms for process synchronization
 - Providing mechanisms for process communication
 
-The operating system is responsible for the following activities in connection with memory management:
+**The operating system is responsible for the following activities in connection with memory management:**
 - Keeping track of which parts of memory are currently being used and which process is using them
 - Allocating and de-allocating memory space as needed
 - Deciding which processes (or parts of processes) and data to move into and out of memory
 
-The operating system is responsible for the following activities in connection with file management:
+**The operating system is responsible for the following activities in connection with file management:**
 - Creating and deleting files
 - Creating and deleting directories to organize files
 - Supporting primitives for manipulating files and directories
 - Mapping files onto mass storage
 - Backing up files on stable (nonvolatile) storage media
 
-The operating system is responsible for the following activities in connection with secondary storage management:
+**The operating system is responsible for the following activities in connection with secondary storage management:**
 - Mounting and unmounting
 - Free-space management
 - Storage allocation
@@ -220,7 +220,7 @@ The operating system is responsible for the following activities in connection w
 - Partitioning
 - Protection
 
-Cache management
+**Cache management**
 
 Information, As it is used, it is copied into a faster storage system, from disk to memory to cache. 
 - Then when the information change, it must update back from cache -> memory -> disk.
@@ -238,7 +238,7 @@ spooling
 - A general device-driver interface
 - Drivers for specific hardware devices
 
-A device driver is a specialized software program that allows the operating system (OS) and applications to interact with hardware devices, such as printers, graphics cards, storage devices, network interfaces, and more.
+A **device driver** is a specialized software program that allows the operating system (OS) and applications to interact with hardware devices, such as printers, graphics cards, storage devices, network interfaces, and more.
 - `driverquery` list all driver on Windows
 
 
@@ -252,36 +252,31 @@ It is the job of `security` to defend a system from external and internal attack
 - group identifiers
 - escalate privileges
 
-Kernel Data Structures
+### Kernel Data Structures
 
-Lists, Stacks, and Queues:
-- In a singly linked list, each item points to its successor
-![singly linked list](./Assets/image_8.png)
+- Lists:
+  - In a singly linked list, each item points to its successor
+  ![singly linked list](./Assets/image_8.png)
 
-- In a doubly linked list, a given item can refer either to its predecessor orto its successor
-![doubly linked list](./Assets/image_9.png)
+  - In a doubly linked list, a given item can refer either to its predecessor orto its successor
+  ![doubly linked list](./Assets/image_9.png)
 
-- In a circularly linked list, the last element in the list refers to the first element, rather than to null.
-![circularly linked list](./Assets/image_10.png)
+  - In a circularly linked list, the last element in the list refers to the first element, rather than to null.
+  ![circularly linked list](./Assets/image_10.png)
 
-A stack is a sequentially ordered data structure that uses the last in, first
-out ( LIFO) principle for adding and removing items, meaning that the last item
-placed onto a stack is the first item removed
+- A stack is a sequentially ordered data structure that uses the last in, first out ( LIFO) principle for adding and removing items, meaning that the last item placed onto a stack is the first item removed
 
-A queue, in contrast, is a sequentially ordered data structure that uses the
-first in, first out (FIFO) principle: items are removed from a queue in the order
-in which they were inserted.
+- A queue, in contrast, is a sequentially ordered data structure that uses the first in, first out (FIFO) principle: items are removed from a queue in the order in which they were inserted.
 
-Trees:
-- general tree
-- binary tree
-- binary search tree
+- Trees:
+  - general tree
+  - binary tree
+  - binary search tree
 
-Hash Functions and Maps
+- Hash Functions and Maps
+- Bitmaps
 
-Bitmaps
-
-Computing Environments
+### **Computing Environments**
 - Traditional Computing
 - Mobile Computing
 - Distributed Systems
@@ -291,7 +286,7 @@ Computing Environments
 - Cloud Computing
 - Real-Time Embedded Systems
 
-Virtualization: Virtualization is a technology that allows operating systems to run as applications within other operating systems.
+**Virtualization:** Virtualization is a technology that allows operating systems to run as applications within other operating systems.
 
 - `Public cloud` —a cloud available via the Internet to anyone willing to pay
 for the services
@@ -311,25 +306,24 @@ production data)
 ![Basic OS](./Assets/image_11.png)
 
 **User-Oriented Services:**
-
-User Interface (UI): Provides ways to interact with the system:
+- User Interface (UI): Provides ways to interact with the system:
     - Command-Line Interface (CLI): Text-based commands.
     - Batch Interface: Commands stored in files for execution.
     - Graphical User Interface (GUI): Visual interface with windows, menus, and input devices.
 
-Program Execution:
+- Program Execution:
     - Loads programs into memory, runs them, and manages normal or abnormal termination.
 
-I/O Operations:
+- I/O Operations:
     - Handles input and output through files or devices, ensuring efficient and protected operations.
 
-File-System Manipulation:
+- File-System Manipulation:
     - Provides functions to read, write, create, delete, and manage files and directories, including permissions and support for various file systems.
 
-Communication:
+- Communication:
     - Facilitates data exchange between processes using shared memory or message passing, either locally or over a network.
 
-Error Detection:
+- Error Detection:
     - Identifies and manages errors in hardware, devices, or software, taking actions like process termination or error reporting to maintain consistency.
 
 **System-Oriented Services:**
@@ -343,7 +337,7 @@ Accounting:
 Protection and Security:
   - Controls access to system resources and safeguards against interference or unauthorized access through authentication and security mechanisms.
 
-System calls can be grouped roughly into six major categories: 
+**System calls can be grouped roughly into six major categories:**
 - Process control
 - File manipulation 
 - Device manipulation 
@@ -351,7 +345,7 @@ System calls can be grouped roughly into six major categories:
 - Communications 
 - Protection.
 
-Process control
+**Process control**
 - end, abort
 - load, execute
 - create process, terminate process
@@ -470,9 +464,8 @@ A system therefore consists of a collection of processes:
 
 By switching the CPU between processes, the operating system can make the computer more productive.
 
-A process:
+**A process:**
 - The program code ~ sometimes known as the `text section`
-  - 
 - Process `stack` ~ which contains temporary data (such as function parameters, return addresses, and local variables)
 - `data section` ~  which contains global variables
 - `heap` ~ which is memory that is dynamically allocated during process run time.
@@ -543,10 +536,8 @@ interrupt, and be put back in the ready queue.
    - The `short-term scheduler` must be fast, quick, can't wait time much to choose process, it make `CPU` less efficiency.
    - The `long-term scheduler` may need to be invoked only when a process leaves the system. Because of the longer interval between executions, it can afford to take more time to decide which process should be selected for execution.
 
-
 It is important that the `long-term scheduler` make a careful selection, these are two type of process can be consider:
-- An `I/O -bound process` is one that spends more of its time doing I/O than
-it spends doing computations.
+- An `I/O -bound process` is one that spends more of its time doing I/O than it spends doing computations.
 - A `CPU-bound process`, in contrast, generates I/O requests infrequently, using more of its time doing computations.
 
 Some operating systems, such as time-sharing systems, may introduce an intermediate level of scheduling. The key idea behind a `medium-term scheduler` is that sometimes it can be advantageous to remove a process from memory
@@ -567,7 +558,7 @@ Context-switch times are highly dependent on hardware support.
 
 ### Process Creation
 
-**Tree of processes: **
+**Tree of processes:**
 - The parent process creates a child process.
 - Each of these new processes may in turn create other processes.
 
@@ -636,8 +627,7 @@ Shared memory suffers from cache coherency issues -> message passing become more
 
 - The process creating the shared-memory segment. Typically, in the address space of that process.
 - Other processes that wish to communicate using this shared-memory segment must attach it to their address space
-- Normally, the OS tries to prevent one process from accessing another process’s
-memory -> So the processes must agree to remove this restriction.
+- Normally, the OS tries to prevent one process from accessing another process’s memory -> So the processes must agree to remove this restriction in order to acess.
 
 The `producer–consumer` approach:
 - Have available a buffer of items that can be filled by the producer and emptied by the consumer.
@@ -701,7 +691,7 @@ POSIX shared memory is organized using memory-mapped files, which associate the 
 - Once the object is established, the `ftruncate()` function is used to configure the size of the object in bytes.
 - Finally, the `mmap()` function establishes a memory-mapped file containing the shared-memory object. -> returns a pointer to the memory-mapped file that is used for accessing the shared-memory object.
 
-#### Mach
+#### MacOS
 
 #### Windows
 
@@ -954,7 +944,6 @@ Windows does not explicitly provide support for signals, it allows us to emulate
 
 - Asynchronous cancellation: One thread immediately terminates the target thread
 - Deferred cancellation: The target thread periodically checks whether it should terminate, allow it have opportunity to terminates itself in an orderly way.
-
 
 The difficulty with cancellation occurs in situations where resources have been allocated to a canceled thread or where a thread is canceled while in the midst of updating data it is sharing with other threads.
   - In some case, canceling a thread asynchronously may not free a necessary system-wide resource.

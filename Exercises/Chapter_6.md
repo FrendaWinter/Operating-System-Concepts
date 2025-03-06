@@ -1,6 +1,13 @@
 # Chapter 6 exercises
 
 #### 6.1 A CPU-scheduling algorithm determines an order for the execution of its scheduled processes. Given n processes to be scheduled on one processor, how many different schedules are possible? Give a formula in terms of n.
+The number of different possible schedules for nn processes on a single processor is equivalent to the number of ways to arrange nn distinct processes in a sequence.
+
+Total Schedules = `n!`
+
+where: `n!=n×(n−1)×(n−2)×⋯×2×1`
+
+If we have 3 process we have 6 orders, 4 is 24 order.
 
 #### 6.2 Explain the difference between preemptive and nonpreemptive scheduling.
 
@@ -15,24 +22,57 @@
 | P2      | 0.4          | 4          |
 | P3      | 1.0          | 1          |
 
-- What is the average turnaround time for these processes with the FCFS scheduling algorithm?
-- What is the average turnaround time for these processes with the SJF scheduling algorithm?
-- The SJF algorithm is supposed to improve performance, but notice that we chose to run process P1 at time 0 because we did not know that two shorter processes would arrive soon. Compute what the average turnaround time will be if the CPU is left idle for the first 1 unit and then SJF scheduling is used. Remember that processes P1 and P2 are waiting during this idle time, so their waiting time may increase. This algorithm could be called future-knowledge scheduling.
+TAT = CT (Completion Times) − Arrival Time
 
+- What is the average turnaround time for these processes with the FCFS scheduling algorithm?
+    - For P1, it take 8 time unit (from 0) to finish 
+    - For p2, it take 12 time unit (from 0) to finish, minus 0.4 arrival time, so p2 take 11.6 time unit (in queue and execute)
+    - Similar, p3 take 12 time unit.
+    - In average, turnarounf time is 10.53
+
+- What is the average turnaround time for these processes with the SJF scheduling algorithm?
+    - At time 0.0, P1 is the only available process, so it starts execution. -> TT (Turnaround Times) of P1 = 8.0
+    - At time 8.0, both P2 and P3 have arrived. SJF selects the shortest burst time, so P3 (1 unit) executes next. -> TT of P3 = 8.0
+    - At time 9.0, P2 (4 units) executes. -> TT of P2 = 12.6
+    - Average TAT = 9.53
+
+- The SJF algorithm is supposed to improve performance, but notice that we chose to run process P1 at time 0 because we did not know that two shorter processes would arrive soon. Compute what the average turnaround time will be if the CPU is left idle for the first 1 unit and then SJF scheduling is used. Remember that processes P1 and P2 are waiting during this idle time, so their waiting time may increase. This algorithm could be called future-knowledge scheduling.
+    - If CPU idea in the first time unit, TT of P3 = 1
+    - TT of P2 = 5.6
+    - TT of P1 = 14
+    - Average TAT = 6.86
+
+---
 #### 6.4 What advantage is there in having different time-quantum sizes at different levels of a multilevel queueing system?
+
+Each queue and priority need a different time-quantum, Process that high priority and require more CPU time will need longer time-quantum.
+
+Other lower process maybe not need long time-quantum, that make lower priority process take more CPU time.
+
+So have different time-quantum help system more flexiable, more effient when choosing what process to run, create fairness and balance on scheduling.
+
+---
 #### 6.5 Many CPU-scheduling algorithms are parameterized. For example, the `RR` algorithm requires a parameter to indicate the time slice. Multilevel feedback queues require parameters to define the number of queues, the scheduling algorithm for each queue, the criteria used to move processes between queues, and so on.
 These algorithms are thus really sets of algorithms (for example, the set of RR algorithms for all time slices, and so on). One set of algorithms may include another (for example, the `FCFS` algorithm is the RR algorithm with an infinite time quantum). What (if any) relation holds between the following pairs of algorithm sets?
 - Priority and SJF
+    - In the same priority level, SJF will be use to choose between process.
 - Multilevel feedback queues and FCFS
+    - In the same queue, same time-quantum, FCFS maybe use to choose between process.
 - Priority and FCFS
+    - In the same priority level, FCFS maybe use to choose between process.
 - RR and SJF
+    - In RR with infinite time-quantum, FCFS maybe use to choose between process.
 
 ---
 
 #### 6.6 Suppose that a scheduling algorithm (at the level of short-term CPU scheduling) favors those processes that have used the least processor time in the recent past. Why will this algorithm favor I/O-bound programs and yet not permanently starve CPU-bound programs?
 
+---
 #### 6.7 Distinguish between PCS and SCS scheduling.
+---
 #### 6.8 Assume that an operating system maps user-level threads to the kernel using the many-to-many model and that the mapping is done through the use of LWPs. Furthermore, the system allows program developers to create real-time threads. Is it necessary to bind a real-time thread to an LWP?
+---
+
 #### 6.9 The traditional UNIX scheduler enforces an inverse relationship between priority numbers and priorities: the higher the number, the lower the priority. The scheduler recalculates process priorities once per second using the following function:
 `Priority = (recent CPU usage / 2) + base`
 

@@ -2118,6 +2118,57 @@ When request for I/O acessing on file. We can use the virtual memory techniques 
 
 Some OS provide memory mapping only through a specific system call and use the standard system calls to perform all other file I/O.
 
-Multiple processes may be allowed to map the same file concurrently, to allow sharing of data.
+Multiple processes may be allowed to map the same file concurrently, to allow sharing of data. 
+
+
+![File mapping](./Assets/image_57.png)
+
+Multiple processes may be allowed to map the same file concurrently, to allow sharing of data. 
+- Any change from process maybe seen from other process
+- Or memory-mapping systems call can also support copy-on-write function, it make a copy of file when the process want to change it.
+
+### Sharing memory in Windows API
+
+- To establish a memory-mapped file, a process first opens the file to be mapped with the `CreateFile()` function -> Return HANDLE
+- The process then creates a mapping of this file HANDLE using the `CreateFileMapping()` function
+  - Create a **named shared-memory object** call **SharedObject**
+- Once the file mapping is established, the process then establishes a view of the mapped file in its virtual address space with the `MapViewOfFile()` function.
+- The consumer will be able to using this share-memory by create a mapping to the same named object.
+- Finally, both processes remove the view of the mapped file with a call to **UnmapViewOfFile()**
+
+### Memory mapping I/O
+
+To allow more convenient access to I/O devices, many computer architectures provide **memory-mapped I/O**.
+- In this case, ranges of memory addresses are set aside and are mapped to the device registers.
+- Read and write will transfer that data to and from the device register.
 
 ## Allocating kernel memory
+
+Allocation for kernel memory is quite diffent from allocation for user process.There are two primary reasons for this:
+1. The kernel requests memory for data structures of varying sizes, some of which are less than a page in size. As a result, the kernel must use memory conservatively and attempt to minimize waste due to fragmentation. 
+    - This is especially important because many operating systems do not subject kernel code or data to the paging system.
+2. Pages allocated to user-mode processes do not necessarily have to be in contiguous physical memory. However, certain hardware devices interact directly with physical memory without the benefit of a virtual memory interface and consequently may require memory residing in physically contiguous pages.
+
+**Buddy system**:
+
+![Buddy system](./Assets/image_58.png)
+
+Buddy system divide the memory until the smallest memory fit the memory that be requested. **power-of-2 allocator**
+
+The obvious drawback to the buddy system is that rounding up to the next highest power of 2 is very likely to cause fragmentation within allocated segments
+
+**Slab allocation**:
+
+A **slab** is made up of one or more physically contiguous pages. 
+- A cache consists of one or more slabs.
+- There is a single cache for each unique kernel data structure
+- Each cache is populated with objects that are instantiations of the kernel data structure the cache represents
+
+![Slab](./Assets/image_59.png)
+
+In Linux, a slab may be in one of three possible states:
+1. Full. All objects in the slab are marked as used.
+2. Empty. All objects in the slab are marked as free.
+3. Partial. The slab consists of both used and free objects.
+
+## Other considerations.

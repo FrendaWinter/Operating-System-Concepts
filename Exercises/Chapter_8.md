@@ -109,3 +109,8 @@ page number = 4
 offset = 3602
 ```
 Writing this program will require using the appropriate data type to store 32 bits. We encourage you to use unsigned data types as well.
+
+- 32-bit virtual address → This means the virtual address range is from 0 to 2^32 - 1.
+- Page size = 4 KB (4096 bytes) → This means each page contains 4096 (or 2^12) bytes.
+- Page Number = Virtual Address / Page Size
+- Offset = Virtual Address % Page Size

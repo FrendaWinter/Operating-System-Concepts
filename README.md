@@ -2258,3 +2258,65 @@ memory manager perform **automatic working-set trimming** to restore the value a
   - Priority paging (Chap 12.6.2)
 
 # Chapter 10
+
+We mainly use 2 type of disk:
+- Magnetic Disks
+- Solid-State Disks
+
+**Magnetic Disks**
+
+A read–write head “flies” just above each surface of every platter. The heads are attached to a **disk arm** that moves all the heads as a unit. 
+
+![HDD](./Assets/image_61.png)
+
+The **positioning time**, or **random-access time**, consists of two parts:
+- The time necessary to move the disk arm to the desired cylinder, called the **seek time**
+- The time necessary for the desired sector to rotate to the disk head, called the **rotational latency.**
+
+The **transfer rate** is the rate at which data flow between the drive and the computer.
+
+Data transfers on a bus are managed by **controllers**. The **host controller** is located at the computer end, while each disk drive has its own **disk controller**. 
+- To perform disk I/O, the computer sends a command to the **host controller**, 
+- Which forwards it to the **disk controller**. 
+- The disk controller then operates the **disk hardware**. 
+- Disk controllers typically include a **cache**, enabling fast data transfers between the **cache and disk surface**, as well as between the **cache and host controller** at electronic speeds. 
+
+**SSD**
+
+**SSDs** have the same characteristics as traditional hard disks but can be more reliable because they have no moving parts and faster because they have no **seek time** or **latency**.
+
+Note: because **SSDs** have no disk head, **disk-scheduling algorithms** largely do not apply. **Throughput** and **formatting**, however, do apply.
+
+## Disk structure
+
+## Disk attachment
+
+**Host-Attached Storage**
+
+**Network-Attached Storage**
+
+**Storage-Area Network**
+
+![SAN](./Assets/image_62.png)
+
+## Disk Scheduling
+
+Whenever a process needs I/O to or from the disk, it issues a system call to the operating system. The request specifies several pieces of information:
+- Whether this operation is input or output
+- What the disk address for the transfer is
+- What the memory address for the transfer is
+- What the number of sectors to be transferred is
+
+**FCFS scheduling**: First come first serve. 
+
+**SSTF Scheduling**: Shortest-seek-time-first ( SSTF) algorithm.
+
+**SCAN Scheduling**:
+
+**C-SCAN Scheduling**
+
+**LOOK Scheduling**
+
+**Selection of a Disk-Scheduling Algorithm**
+
+## Disk Management

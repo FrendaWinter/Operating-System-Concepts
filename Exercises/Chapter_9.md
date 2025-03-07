@@ -5,8 +5,8 @@ Page fault occur when page of process is not in memory for CPU to access.
 
 
 #### 9.2 Assume that you have a page-reference string for a process with m frames (initially all empty). The page-reference string has length p, and n distinct page numbers occur in it. Answer these questions for any page-replacement algorithms:
-    a. What is a lower bound on the number of page faults?
-    b. What is an upper bound on the number of page faults?
+a. What is a lower bound on the number of page faults?
+b. What is an upper bound on the number of page faults?
 
 #### 9.3 Consider the page table shown in Figure 9.30 for a system with 12-bit virtual and physical addresses and with 256-byte pages. The list of free page frames is D, E, F (that is, D is at the head of the list, E is second, and F is last).
 Convert the following virtual addresses to their equivalent physical addresses in hexadecimal. All numbers are given in hexadecimal. (A dash for a page frame indicates that the page is not in memory.)
@@ -47,8 +47,21 @@ Convert the following virtual addresses to their equivalent physical addresses i
 #### 9.33
 #### 9.34
 #### 9.35
-#### 9.36
-#### 9.37
-#### 9.38
+#### 9.36 A system provides support for user-level and kernel-level threads. The mapping in this system is one to one (there is a corresponding kernel thread for each user thread). Does a multithreaded process consist of (a) a working set for the entire process or (b) a working set for each thread? Explain
+
+#### 9.37 The slab-allocation algorithm uses a separate cache for each different object type. Assuming there is one cache per object type, explain why this scheme doesn’t scale well with multiple CPUs. What could be done to address this scalability issue?
+
+---
+
+#### 9.38 Consider a system that allocates pages of different sizes to its processes. What are the advantages of such a paging scheme? What modifications to the virtual memory system provide this functionality?
+- Reduced Page Table Size
+- Minmize the internal fragmentation.
+- Large page reduce I/O operation -> Improve performent.
+
+---
 #### 9.39
+
+[Code](../Code/Chapter_9/9.39/main.cpp)
+
+---
 #### 9.40

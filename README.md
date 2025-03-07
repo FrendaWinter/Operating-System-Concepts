@@ -2161,3 +2161,100 @@ In Linux, a slab may be in one of three possible states:
 3. Partial. The slab consists of both used and free objects.
 
 ## Other considerations.
+
+**Pre-paging**:
+
+When the process started -> the large number of page fault will occurs.
+
+Prepaging is an attempt to prevent this high level of initial paging. The strategy is to bring into memory at one time all the pages that will be needed.
+
+**Page size**: What is the best page-size for the system, each system can apply many page-size, how to choose?
+
+**TLB Reach**: The TLB reach refers to the amount of memory accessible from the TLB and is simply the number of entries multiplied by the page size.
+
+**Inverted page tables**:
+
+**Program structure**:
+
+Careful selection of data structures and programming structures can increase locality and hence lower the page-fault rate and the number of pages in the working set. 
+
+```c
+int i, j;
+int[128][128] data;
+for (j = 0; j < 128; j++)
+  for (i = 0; i < 128; i++)
+    data[i][j] = 0;
+```
+This code above have 128 × 128 = 16,384 page faults.
+
+```C
+int i, j;
+int[128][128] data;
+for (i = 0; i < 128; i++)
+  for (j = 0; j < 128; j++)
+    data[i][j] = 0;
+```
+While this code only have 128 page faults.
+
+**I/O Interlock and Page Locking**:
+When demand paging is used, we sometimes need to allow some of the pages to be **locked** in memory
+
+Scenerio:
+- A process issues an I/O request -> put in a queue 
+- The CPU is given to other processes
+- Page fault -> New page replace the old page of waiting process
+
+There are two common solution for this:
+- One solution is never to execute I/O to user memory. Instead, data are always copied between system memory and user memory.
+  - To write a block on tape, we first copy the block to system memory and then write it to tape. 
+  - This extra copying may result in unacceptably high overhead.
+- Another solution is to allow pages to be locked into memory. Here, a lock bit is associated with every frame. If the frame is locked, it cannot be selected for replacement
+  - Note that this feature could be abused and could cause stress on the memory-management algorithms. 
+  - Therefore, an application frequently requires special privileges to make such a request.
+
+![I/O and buffer](./Assets/image_60.png)
+
+## Example 
+
+### Windows 
+
+Windows implements virtual memory using demand paging with clustering.
+- Clustering handles page faults by bringing in not only the faulting page but also several pages following the faulting page.
+
+When process is first created: It assigned:
+- **Working-set minimum**: minimum number of pages the process is guaranteed to have in memory
+- **Working-set maximum**
+
+When the amount of free memory falls below the threshold, the virtual
+memory manager perform **automatic working-set trimming** to restore the value above the threshold.
+- It Trim (removes) pages until the process reaches its working-set minimum.
+
+## Solaris
+
+- When a thread incurs a page fault, Solaris assigns a page from a free list maintained by the kernel.
+- The **lotsfree** parameter (1/64 of physical memory) determines when paging should start.
+- Every 250 milliseconds (4 times per second), the kernel checks if free memory falls below **lotsfree.** If so, the pageout process begins.
+- The pageout process uses a two-handed clock algorithm:
+  - **Front hand** sets reference bits to 0 as it scans pages.
+  - **Back hand** checks reference bits; if still 0, the page is freed and written to disk if modified.
+- Solaris maintains:
+  - A cache list of recently freed pages (available for reuse if accessed soon).
+  - A free list of pages with invalid contents.
+- The scanrate (pages scanned per second) varies based on free memory:
+  - Starts at **slowscan** (default: 100 pages/sec).
+  - Increases towards fastscan as memory pressure rises.
+  - **Fastscan** is set to (total physical pages)/2 pages per second, with a maximum of 8,192 pages/sec.
+  - The handspread parameter determines the distance between the two hands of the clock algorithm. 
+  - The time delay between clearing and checking a reference bit depends on scanrate and handspread:
+
+    - Example: If scanrate = 100 pages/sec and handspread = 1,024, the delay is 10 seconds.
+    - However, due to high memory demand, scanrates of several thousand pages/sec are common, reducing the delay to just a few seconds.
+
+- The pageout process normally runs 4 times per second but increases to 100 times per second if free memory drops below desfree.
+-  If desfree is not maintained for 30 seconds, the kernel starts swapping processes to free memory, prioritizing idle processes.
+-  If free memory falls below minfree, the pageout process is triggered for every page request.
+- Recent Solaris optimizations:
+  - Shared library pages used by multiple processes are skipped during scanning, preventing unnecessary pageouts.
+  - Priority paging (Chap 12.6.2)
+
+# Chapter 10

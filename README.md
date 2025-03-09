@@ -2289,13 +2289,40 @@ Note: because **SSDs** have no disk head, **disk-scheduling algorithms** largely
 
 ## Disk structure
 
+Modern magnetic disk drives are addressed as large one-dimensional arrays of **logical blocks**
+- Where the logical block is the smallest unit of transfer. 
+- The size of a logical block is usually 512 bytes
+
 ## Disk attachment
+Computers access disk storage in two ways
+- Via I/O ports (**host-attached storage**); this is common on small systems
+- Via a remote host in a distributed file system; this is referred to as **network-attached storage** 
 
 **Host-Attached Storage**
 
+Host-attached storage is storage accessed through local I/O ports. These ports use several technologies.
+- Typical: **IDE** or **ATA** (Support maximum of two drives per I/O bus.)
+- A newer, similar protocol that has simplified cabling is **SATA**
+- High-end workstations and servers use more sophisticated I/O architectures such as fibre channel (**FC**)
+
+
 **Network-Attached Storage**
 
+Clients access network-attached storage via a remote-procedure-call interface such as:
+- **NFS** for UNIX systems  
+- **CIFS** for Windows machines. 
+
+![NAS](./Assets/image_63.png)
+
+**iSCSI** is the latest network-attached storage protocol. In essence, it uses the IP network protocol to carry the SCSI protocol
+
 **Storage-Area Network**
+
+Same with NAS but on private network
+
+- **FC** is the most common SAN interconnect,
+- Although the simplicity of **iSCSI** is increasing its use. 
+- Another SAN interconnect is **InfiniBand** — a special-purpose bus architecture that provides hardware and software support for high-speed interconnection networks for servers and storage units
 
 ![SAN](./Assets/image_62.png)
 
@@ -2312,14 +2339,38 @@ Whenever a process needs I/O to or from the disk, it issues a system call to the
 **SSTF Scheduling**: Shortest-seek-time-first ( SSTF) algorithm.
 
 **SCAN Scheduling**:
+In the **SCAN** algorithm, the disk arm starts at one end of the disk and moves toward the other end, servicing requests as it reaches each cylinder, until it gets to the other end of the disk. 
+
+At the other end, the direction of head movement is reversed, and servicing continues. The head continuously scans back and forth across the disk. 
+
+The **SCAN** algorithm is sometimes called the *elevator* algorithm, since the disk arm behaves just like an elevator in a building, first servicing all the requests going up and then reversing to service requests the other way.
 
 **C-SCAN Scheduling**
 
+Circular SCAN (**C-SCAN**) scheduling is a variant of **SCAN** designed to provide a more uniform wait time. 
+- Like SCAN, C-SCAN moves the head from one end of the disk to the other, servicing requests along the way. 
+- When the head reaches the other end, however, it immediately returns to the beginning of the disk without servicing any requests on the return trip 
+
 **LOOK Scheduling**
+
+More commonly, the arm goes only as far as the final request in each direction. Then, it reverses direction immediately, without going all the way to the end of the disk.
+- Versions of SCAN and C-SCAN that follow this pattern are called **LOOK** and **C-LOOK** scheduling, because they look for a request before continuing to move in a given direction
 
 **Selection of a Disk-Scheduling Algorithm**
 
+SSTF is common and has a natural appeal because it increases performance over FCFS.
+
+SCAN and C-SCAN perform better for systems that place a heavy load on the disk, because they are less likely to cause a starvation problem.
+
+With any scheduling algorithm, however, performance depends heavily on the number and types of requests.
+
 ## Disk Management
+
+### Disk formating
+
+### Boot block
+
+### Bad block
 
 ## RAID Structure
 

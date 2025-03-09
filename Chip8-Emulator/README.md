@@ -1,5 +1,6 @@
 # Chip 8 emulator
 
+## Concept and ref
 Ref: https://austinmorlan.com/posts/chip8_emulator/
 
 Instruction ref: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
@@ -47,3 +48,37 @@ $20E: LD V4, $4
 [Code](https://github.com/JamesGriffin/CHIP-8-Emulator/tree/master)
 
 Can write code with octo [Octo](https://github.com/JohnEarnest/Octo)
+
+# My version
+
+**Idea**:
+
+- Chip8 Emulator with raylib as display [Raylib](https://www.raylib.com/)
+
+- Buil system using `nob` [Nob](https://github.com/tsoding/nob.h)
+
+**How to build**
+
+Build with raylib, nob
+```bash
+mkdir build
+gcc nob_raylib.c
+./a.out
+```
+
+Build with SDL2 and cmake (Original from [JamesGriffin repo](https://github.com/JamesGriffin/CHIP-8-Emulator/tree/master))
+
+```bash
+sudo apt-get install cmake libsdl2-dev
+mkdir build
+cd build
+cmake ..
+make
+```
+
+Build with SDL2 and g++, nob
+```bash
+mkdir build
+gcc nob.c
+./a.out
+```

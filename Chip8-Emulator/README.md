@@ -5,6 +5,8 @@ Ref: https://austinmorlan.com/posts/chip8_emulator/
 
 Instruction ref: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
 
+Docs: https://github.com/mattmikolay/chip-8/wiki/Mastering-CHIP%E2%80%908
+
 How stack work?
 
 Stack will contains the PC for next instruction when we JMP or CALL orther instruction. So when it RET, it came back to the previours flow.

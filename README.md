@@ -2368,10 +2368,99 @@ With any scheduling algorithm, however, performance depends heavily on the numbe
 
 ### Disk formating
 
+Before a disk can store data, it must be divided into sectors that the disk controller can read and write. This process is called **low-level formatting**, or **physical formatting**.
+
+**Low-level formatting** fills the disk with a special data structure for each sector. The data stucture typically consist:
+- Header
+- Data area (Usually 512 bytes)
+- Trailer
+
+The **header** and **trailer** contain information used by the disk controller, such as a sector number and an error-correcting code (ECC)
+- When the sector is read, the **ECC** is recalculated and compared with the stored value. If the stored and calculated numbers are different, this mismatch indicates that the data area of the sector has become corrupted and that the disk sector may be bad
+
+Before it can use a disk to hold files, **the operating system still needs to record its own data structures on the disk**. It does so in two steps: 
+- The first step is to **partition**
+- The second step is **logical formatting**, or creation of a file system.
+
+Some operating systems give special programs the ability to use a disk partition as a large sequential array of logical blocks, without any file-system data structures. This array is sometimes called **the raw disk**, and I/O to this array is termed **raw I/O**.
+- Raw I/O bypasses all the file-system services, such as the buffer cache, file locking, prefetching, space allocation, file names, and directories.
+- We can make certain applications more efficient by allowing them to implement their own special-purpose storage services on a raw partition, but most applications perform better when they use the regular file-system services.
+
 ### Boot block
+
+When the computer start, **bootstrap** programs run, one step when booting is:
+- The bootstrap program finds the operating-system kernel on disk
+- Loads that kernel into memory
+- Jumps to an initial address to begin the operating-system execution.
+
+A disk that has a boot partition is called a **boot disk** or **system disk**.
 
 ### Bad block
 
+One strategy is to scan the disk to find bad blocks while the disk is being formatted. 
+- Any bad blocks that are discovered are flagged as unusable so that the file system does not allocate them
+-  If blocks go bad during normal operation, a special program (such as the Linux `badblocks` command) must be run manually to search for the bad blocks and to lock them away. 
+    - Data that resided on the bad blocks usually are lost.
+
+The controller maintains a list of bad blocks on the disk. The list is initialized during the low-level formatting at the factory and is updated over the life of the disk.
+- The controller can be told to replace each bad sector logically with one of the spare sectors. This scheme is known as sector sparing or forwarding.
+
+## Swap-space management
+
+Swapping in that setting occurs when the amount of physical memory reaches a critically low point and processes are moved from memory to swap space to free available memory.
+
+The main goal for the design and implementation of swap space is to provide the best throughput for the virtual memory system.
+
+**Swap-space use**: 
+- Swap space is used in various ways by different operating systems, depending on the memory-management algorithms in use. 
+- The amount of swap space needed on a system can therefore vary from a few megabytes of disk space to gigabytes, depending on 
+  - The amount of physical memory
+  - The amount of virtual memory  it is backing
+  - The way in which the virtual memory is used
+
+**Swap-space locations**:
+
+A swap space can reside in one of two places: 
+- It can be carved out of the normal file system.
+  - Easy but inefficient. Navigating the directory structure and the disk allocation data structures takes time and (possibly) extra disk accesses.
+- Or it can be in a separate disk partition.
+  -  This manager uses algorithms optimized for speed rather than for storage efficiency, because swap space is accessed much more frequently than file systems 
+
+Some operating systems are flexible and can swap both in raw partitions and in file-system space. 
+
 ## RAID Structure
+
+**Redundant arrays of independent disks** (RAID): Collection of mutiple disks, at which data can be read or written in parallel.
+
+**Improvement of Reliability via Redundancy**:
+- Because we use multiple disks, one disk fail not lead to system fail.
+- The solution to the problem of reliability is to introduce **redundancy**
+ - The simplest (but most expensive) approach to introducing redundancy is to duplicate every disk. This technique is called **mirroring**
+
+**Improvement in Performance via Parallelism**:
+
+With multiple disks, we can improve the transfer rate as well (or instead) by striping data across the disks 
+- In its simplest form, **data striping** consists of splitting the bits of each byte across multiple disks; such striping is called **bit-level striping.** 
+
+
+Parallelism in a disk system, as achieved through striping, has two main goals:
+1. Increase the throughput of multiple small accesses (that is, page accesses) by load balancing.
+2. Reduce the response time of large accesses.
+
+**RAID levels**
+
+**Mirroring**, **Stripping**, and other schemes to impove performance and reliability. These schemes have different cost–performance trade-offs and are classified according to levels called **RAID levels**. 
+
+![RAID levels](./Assets/image_64.png)
+
+Other features, such as snapshots and replication, can be implemented at each of these levels as well.
+- A **snapshot** is a view of the file system before the last update took place. (Snapshots are covered more fully in Chapter 12.) 
+- **Replication** involves the automatic duplication of writes between separate sites for redundancy and disaster recovery.
+
+**Selecting a RAID Level**
+
+**Extensions**
+
+**Problems with RAID**
 
 ## Stable-Storage Implementation

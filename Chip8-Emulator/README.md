@@ -82,3 +82,9 @@ mkdir build
 gcc nob.c
 ./a.out
 ```
+
+**How to code**:
+
+- Use [Octo](https://github.com/JohnEarnest/Octo)
+  - Write octo code in the file
+  - Complie with `octo <input_file> <output_file>`

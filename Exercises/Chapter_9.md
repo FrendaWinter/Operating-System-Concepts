@@ -3,10 +3,20 @@
 
 Page fault occur when page of process is not in memory for CPU to access. 
 
-
+Operation system do:
+1. Check an internal table (usually kept with the process control block) for this process to determine whether the reference was a valid or an invalid memory access.
+2. If the reference was invalid, we terminate the process. If it was valid but we have not yet brought in that page, we now page it in.
+3. We find a free frame (by taking one from the free-frame list, for example).
+4. We schedule a disk operation to read the desired page into the newly allocated frame.
+5. When the disk read is complete, we modify the internal table kept with the process and the page table to indicate that the page is now in memory.
+6. We restart the instruction that was interrupted by the trap. The process can now access the page as though it had always been in memory.
 #### 9.2 Assume that you have a page-reference string for a process with m frames (initially all empty). The page-reference string has length p, and n distinct page numbers occur in it. Answer these questions for any page-replacement algorithms:
-a. What is a lower bound on the number of page faults?
-b. What is an upper bound on the number of page faults?
+- What is a lower bound on the number of page faults?
+    - Lower bound is number of page faults occur when init, each distinct page will create page fault.
+    - `n` if `n` < `m`
+    - `m` if `n` > `m`
+
+- What is an upper bound on the number of page faults?
 
 #### 9.3 Consider the page table shown in Figure 9.30 for a system with 12-bit virtual and physical addresses and with 256-byte pages. The list of free page frames is D, E, F (that is, D is at the head of the list, E is second, and F is last).
 Convert the following virtual addresses to their equivalent physical addresses in hexadecimal. All numbers are given in hexadecimal. (A dash for a page frame indicates that the page is not in memory.)

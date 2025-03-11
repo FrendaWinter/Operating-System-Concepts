@@ -31,14 +31,14 @@ void *ta_function(void *arg)
                 break;
             }
             waiting_students--; // Decrement the number of waiting students
+            pthread_mutex_unlock(&chairs_mutex);
 
-            printf("TA is helping a student...\n");
+            printf("TA is helping a student. 1 in help. Remain waiting student: %d\n", waiting_students);
             sleep(rand() % 3 + 1); // Simulate help session
             printf("TA finished helping a student.\n");
 
             // Signal done. Student got help
             sem_post(&students_waiting);
-            pthread_mutex_unlock(&chairs_mutex);
         }
     }
 }

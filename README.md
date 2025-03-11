@@ -2453,14 +2453,65 @@ Parallelism in a disk system, as achieved through striping, has two main goals:
 
 ![RAID levels](./Assets/image_64.png)
 
+- RAID level 0. RAID level 0 refers to disk arrays with striping at the level of blocks but without any redundancy (such as mirroring or parity bits).
+- RAID level 1. RAID level 1 refers to disk mirroring.
+- RAID level 2. RAID level 2 is also known as memory-style error-correcting-code (ECC ) organization.
+- RAID level 3. RAID level 3, or bit-interleaved parity organization.
+- RAID level 4. RAID level 4, or block-interleaved parity organization.
+- RAID level 5. RAID level 5, or block-interleaved distributed parity, differs from level 4 in that it spreads data and parity among all N + 1 disks, rather than storing data in N disks and parity in one disk. 
+- RAID level 6. RAID level 6, also called the `P + Q` redundancy scheme, is much like RAID level 5 but stores extra redundant information to guard against multiple disk failures.
+
 Other features, such as snapshots and replication, can be implemented at each of these levels as well.
 - A **snapshot** is a view of the file system before the last update took place. (Snapshots are covered more fully in Chapter 12.) 
 - **Replication** involves the automatic duplication of writes between separate sites for redundancy and disaster recovery.
 
 **Selecting a RAID Level**
+- RAID level 0 is used in high-performance applications where data loss is not critical. 
+- RAID level 1 is popular for applications that require high reliability with fast recovery.
+- RAID 0 + 1 and 1 + 0 are used where both performance and reliability are important—for example, for small databases.
+- RAID 5 is often preferred for storing large volumes of data. 
+- Level 6 is not supported currently by many RAID implementations, but it should offer better reliability than level 5.
 
-**Extensions**
+**Extensions** 
+
+The concepts of RAID have been generalized to other storage devices, including arrays of tapes, and even to the broadcast of data over wireless systems. 
 
 **Problems with RAID**
 
+Unfortunately, RAID does not always assure that data are available for the operating system and its users.
+- RAID protects against physical media errors, but not other hardware and software errors. 
+- A pointer to a file could be wrong, and when recovery, some error can make the file be corrupted.
+
+The **Solaris ZFS** file system takes an innovative approach to solving these problems through the use of **checksums**
+
+Consider an **inode** — a data structure for storing file system metadata with pointers to its data.
+- Within the *inode* is the checksum of each block of data.
+  - If there is a problem with the data, the checksum will be incorrect, and the file system will know about it. 
+  - If the data are mirrored, and there is a block with a correct checksum and one with an incorrect checksum, ZFS will automatically update the bad block with the good one.
+- Same with directory.
+
+Another issue with most RAID implementations is lack of flexibility.
+  - When we divide Storage to equal volume and FS, some FS need more disk, some need less. But we can not change the structure dynamicly.
+
+ZFS propose the disks, or partitions of disks, are gathered together via RAID sets into **pools** of storage. A **pool** can hold one or more ZFS file systems. The entire pool’s free space is available to all file systems within that pool.
+
+![ZFS](./Assets/image_65.png)
+
 ## Stable-Storage Implementation
+
+The information residing in stable storage is never lost. To implement such storage:
+- Replicate the required information on multiple storage devices (usually disks) with independent failure modes.
+- Coordinate the writing of updates in a way that guarantees that a failure during an update will not leave all the copies in a damaged state.
+- When we are recovering from a failure, we can force all copies to a consistent and correct value, even if another failure occurs during the recovery.
+
+**How?**
+
+First, we need to understand a disk write results in one of three outcomes:
+- Successful completion. The data were written correctly on disk.
+- Partial failure. A failure occurred in the midst of transfer, so only some of the sectors were written with the new data, and the sector being written during the failure may have been corrupted.
+- Total failure. The failure occurred before the disk write started, so the previous data values on the disk remain intact.
+
+Steps to recover the failure, the system must maintain two physical blocks for each logical block.
+- Write the information onto the first physical block.
+- When the first write completes successfully, write the same information onto the second physical block.
+- Declare the operation complete only after the second write completes successfully.

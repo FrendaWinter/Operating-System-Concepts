@@ -81,7 +81,7 @@ Cons:
 
 #### 7.5 Prove that the safety algorithm presented in Section 7.5.3 requires an order of m × n^2 operations.
 
-
+---
 
 #### 7.6 Consider a computer system that runs 5,000 jobs per month and has no deadlock-prevention or deadlock-avoidance scheme. Deadlocks occur about twice per month, and the operator must terminate and rerun about ten jobs per deadlock. Each job is worth about two dollars (in CPU time), and the jobs terminated tend to be about half done when they are aborted.
 
@@ -89,9 +89,9 @@ A systems programmer has estimated that a deadlock-avoidance algorithm (like the
 
 1. What are the arguments for installing the deadlock-avoidance algorithm?
 
-    Pros: Don't have to manually deal with deadlock. 
+- Pros: Don't have to manually deal with deadlock. 
 
-    Cons: Cost more 1000 dollars (in CPU time) ~ 10%. CPU running more.
+- Cons: Cost more 1000 dollars (in CPU time) ~ 10%. CPU running more.
 
 2. What are the arguments against installing the deadlock-avoidance algorithm?
 
@@ -107,3 +107,11 @@ A systems programmer has estimated that a deadlock-avoidance algorithm (like the
 The system are technically cannot detect what process is starving, but the process that have number of being victim of termination is high are probably starving. To deal with that, the most common solution is to include the number of rollbacks in the cost factor.
 
 #### 7.8 Is it possible to have a deadlock involving only one single-threaded process? Explain your answer.
+
+Yes.
+
+First case, in a not re-entrant enviroment, a process try to re-acquire a lock that its own already
+
+Second case, P1 lock a resource then it die unexpected, resource not be release, P2 run and try to acquire the resource.
+
+Third case, P1 lock a resource and create a child process, P1 wait for child, child process try to acquire the resource, but it lock, it wait.

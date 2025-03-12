@@ -2515,3 +2515,158 @@ Steps to recover the failure, the system must maintain two physical blocks for e
 - Write the information onto the first physical block.
 - When the first write completes successfully, write the same information onto the second physical block.
 - Declare the operation complete only after the second write completes successfully.
+
+# Chapter 11
+
+## File concept
+
+From a user’s perspective, a file is the smallest allotment of logical secondary storage; that is, data cannot be written to secondary storage unless they are within a file
+
+**File attributes:**
+
+A file’s attributes vary from one operating system to another but typically consist of these:
+- **Name.** The symbolic file name is the only information kept in human-readable form.
+- **Identifier.** This unique tag, usually a number, identifies the file within the file system; it is the non-human-readable name for the file.
+- **Type.** This information is needed for systems that support different types of files.
+- **Location.** This information is a pointer to a device and to the location of the file on that device.
+- **Size.** The current size of the file (in bytes, words, or blocks) and possibly the maximum allowed size are included in this attribute.
+- **Protection.** Access-control information determines who can do reading, writing, executing, and so on.
+- **Time, date, and user identification.** This information may be kept for creation, last modification, and last use. These data can be useful for protection, security, and usage monitoring.
+
+**File Operations:**
+- Create a file: Two steps are necessary to create a file.
+  - First, space in the file system must be found for the file.
+  - Second, an entry for the new file must be made in the directory.
+- Writing a file: To write a file, we make a system call specifying both the name of the file and the information to be written to the file
+  - The system must keep a **write pointer** to the location in the file where the next write is to take place. 
+  - The **write pointer** must be updated whenever a write occurs.
+- Reading a file: To read from a file, we use a system call that specifies the name of the file and where (in memory) the next block of the file should be put.
+  - We alos keep **read pointer**, where the next read is to take place.
+  - We can simplify as **current-file-position pointer**. Both the read and write operations use this same pointer, saving space and reducing system complexity.
+- Repositioning within a file: Repositioning within a file need not involve any actual I/O . This file operation is also known as a file **seek**.
+- Deleting a file: we release all file space, so that it can be reused by other files, and erase the directory entry.
+- Truncating a file: The user may want to erase the contents of a file but keep its attributes. 
+  - This function allows all attributes to remain unchanged—except for file length
+
+Most of the file operations mentioned involve searching the directory for the entry associated with the named file. To avoid this constant searching, many systems require that an `open()` system call be made before a file is first used. The operating system keeps a table, called the **open-file table**
+
+In summary, several pieces of information are associated with an open file.
+- File pointer
+- File-open count
+- Disk location of the file
+- Access rights
+
+**File Types**
+
+If an operating system recognizes the type of a file, it can then operate on the file in reasonable ways
+
+A common technique for implementing file types is to include the type as part of the file name. The name is split into two parts:
+- A name
+- An file extension
+
+![Common file types](./Assets/image_66.png)
+
+The UNIX system uses a crude **magic number** stored at the beginning of some files to indicate roughly the type of the file, but not all file types have **magic number**
+
+**File structure**
+
+File types also can be used to indicate the internal structure of the file.
+
+Further, certain files must conform to a required structure that is understood by the operating system.
+
+This point brings us to one of the disadvantages of having the operating system support multiple file structures: the resulting size of the operating system is cumbersome
+
+**Internal structure**
+
+Disk systems typically have a well-defined block size determined by the size of a sector. All disk I/O is performed in units of one block (physical record), and all blocks are the same size
+
+Because disk space is always allocated in blocks, some portion of the last block of each file is generally wasted. All file systems suffer from internal fragmentation; the larger the block size, the greater the internal fragmentation.
+
+## Acess methods
+
+**Sequential Access**: Information in the file is processed in order, one record after the other. 
+
+
+**Direct Access:**  Here, a file is made up of fixed-length logical records that allow programs to read and write records rapidly in no particular order. 
+
+**Direct-access** files are of great use for immediate access to large amounts of information. Databases are often of this type. When a query concerning a particular subject arrives, we compute which block contains the answer and then read that block directly to provide the desired information.
+
+The block number provided by the user to the operating system is normally a **relative block number**. A relative block number is an index relative to the beginning of the file
+
+Not all operating systems support both sequential and direct access for file
+
+**Other Access Methods**: Other access methods can be built on top of a *direct-access method*. These methods generally involve the construction of an **index for the file**. The index, like an index in the back of a book, contains pointers to the various blocks. 
+
+To find a record in the file, we first search the index and then use the pointer to access the file directly and to find the desired record.
+
+For example, **IBM’s indexed sequential-access method (ISAM)**   uses a small master index that points to disk blocks of a secondary index. The secondary index blocks point to the actual file blocks. The file is kept sorted on a defined key.
+
+![Index access](./Assets/image_67.png)
+
+## Directory and disk Structure
+
+Partitioning is useful for limiting the sizes of individual file systems, putting multiple file-system types on the same device, or leaving part of the device available for other uses.
+
+A file system can be created on each of these parts of the disk. Any entity containing a file system is generally known as a **volume**. The volume may be a subset of a device, a whole device, or multiple devices linked together into a RAID set. 
+
+![File system](./Assets/image_68.png)
+
+The **device directory** (more commonly known simply as the **directory**) records information—such as name, location, size, and type—for all files on that volume. 
+
+#### Storage Structure
+
+### Directory Overview
+
+The operations that are to be performed on a directory:
+- Search for a file
+- Create a file
+- Delete a file
+- List of directory
+- Rename a file
+- Traverse the file system: We may wish to access every directory and every file within a directory structure.
+
+#### Single-Level Directory
+
+All files are contained in the same directory.
+
+![Single level directory](./Assets/image_70.png)
+
+#### Two-Level Directory
+
+In the two-level directory structure, each user has his own user file directory (UFD). 
+- The **UFD** s have similar structures, but each lists only the files of a single user.
+- When a user job starts or a user logs in, the **system’s master file directory (MFD)** is searched. The **MFD** is indexed by user name or account number, and each entry points to the **UFD** for that user 
+
+![Two level directory](./Assets/image_71.png)
+
+#### Tree-Structured Directories
+
+A directory (or subdirectory) contains a set of files or subdirectories. **A directory is simply another file**, but it is treated in **a special way**. 
+- All directories have the same internal format. One bit in each directory entry defines the entry as a file (0) or as a subdirectory (1). Special system calls are used to create and delete directories.
+
+![Tree directory](./Assets/image_72.png)
+
+#### Acyclic-Graph Directories
+
+A tree structure prohibits the sharing of files or directories. **An acyclic graph** that is, a graph with no cycles—allows directories to share subdirectories and files 
+- The same file or subdirectory may be in two different directories. The acyclic graph is a natural generalization of the tree-structured directory scheme.
+
+![Acyclic graph](./Assets/image_73.png)
+
+A **link** is effectively a pointer to another file or subdirectory
+
+#### General Graph Directory
+
+![General graph](./Assets/image_74.png)
+
+## File-System Mounting
+
+The directory structure may be built out of multiple volumes, which must be **mounted** to make them available within the file-system name space.
+
+The **mount** procedure is straightforward. The operating system is given the name of the device and the **mount point** the location within the file structure where the file system is to be attached.
+
+![Mount volume](./Assets/image_69.png)
+
+## File Sharing
+
+## Protection

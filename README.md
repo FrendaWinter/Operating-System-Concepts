@@ -2627,7 +2627,7 @@ The operations that are to be performed on a directory:
 
 #### Single-Level Directory
 
-All files are contained in the same directory.
+All files are contained in the same directory. A single-level directory has significant limitations, when the number of files increases or when the system has more than one user. Since all files are in the same directory, they must have unique names.
 
 ![Single level directory](./Assets/image_70.png)
 
@@ -2636,8 +2636,15 @@ All files are contained in the same directory.
 In the two-level directory structure, each user has his own user file directory (UFD). 
 - The **UFD** s have similar structures, but each lists only the files of a single user.
 - When a user job starts or a user logs in, the **system’s master file directory (MFD)** is searched. The **MFD** is indexed by user name or account number, and each entry points to the **UFD** for that user 
+  - To delete a file, the operating system confines its search to the local UFD; Thus, it cannot accidentally delete another user’s file that has the same name.
 
 ![Two level directory](./Assets/image_71.png)
+
+This structure effectively isolates one user from another.
+- Isolation is an advantage when the users are completely independent.
+- Disadvantage when the users want to cooperate on some task and to access one another’s files
+
+If access is to be permitted, one user must have the ability to control a file in another user’s directory.
 
 #### Tree-Structured Directories
 
@@ -2646,16 +2653,36 @@ A directory (or subdirectory) contains a set of files or subdirectories. **A dir
 
 ![Tree directory](./Assets/image_72.png)
 
+Path names can be of two types: **absolute** and **relative**. 
+- An **absolute path** name begins at the root and follows a path down to the specified file, giving the directory names on the path. 
+- A **relative path** name defines a path from the current directory.
+
+With a tree-structured directory system, users can be allowed to access, in addition to their files, the files of other users.
+
 #### Acyclic-Graph Directories
 
-A tree structure prohibits the sharing of files or directories. **An acyclic graph** that is, a graph with no cycles—allows directories to share subdirectories and files 
-- The same file or subdirectory may be in two different directories. The acyclic graph is a natural generalization of the tree-structured directory scheme.
+A tree structure prohibits the sharing of files or directories. **An acyclic graph** that is, A directory structure that allows shared files using links but ensures there are no cycles (i.e., no circular references).
+- This is commonly implemented using **hard links** or **symbolic links.**
+- Every file or directory can have multiple parents, but the structure remains a **Directed Acyclic Graph (DAG)**.
+- A **link** is effectively a pointer to another file or subdirectory.
 
 ![Acyclic graph](./Assets/image_73.png)
 
-A **link** is effectively a pointer to another file or subdirectory
+An acyclic-graph directory structure is more flexible than a simple tree structure, but it is also more complex. Several problems must be considered carefully.
+- A file may now have multiple absolute path names
 
 #### General Graph Directory
+
+A directory structure that allows arbitrary cycles, meaning a file or directory can reference itself indirectly or directly.
+Uses hard links, symbolic links, or other references without cycle restrictions.
+
+**Advantages:**
+- Greater flexibility (no restrictions on linking).
+
+**Disadvantages:**
+- Can lead to infinite loops (e.g., if a program recursively scans directories).
+- More complex file deletion and garbage collection mechanisms are required.
+- Navigation and searches (like depth-first traversal) need cycle detection algorithms.
 
 ![General graph](./Assets/image_74.png)
 
@@ -2663,10 +2690,37 @@ A **link** is effectively a pointer to another file or subdirectory
 
 The directory structure may be built out of multiple volumes, which must be **mounted** to make them available within the file-system name space.
 
-The **mount** procedure is straightforward. The operating system is given the name of the device and the **mount point** the location within the file structure where the file system is to be attached.
+The **mount** procedure is straightforward. 
+- The operating system is given the name of the device and the **mount point** the location within the file structure where the file system is to be attached.
+- Next, the operating system verifies that the device contains a valid file system. 
+  - It does so by asking the device driver to read the device directory and verifying that the directory has the expected format. 
+- Finally, the operating system notes in its directory structure that a file system is mounted at the specified **mount point**.
 
 ![Mount volume](./Assets/image_69.png)
 
 ## File Sharing
+
+**Multiple user**: To implement sharing and protection, the system must maintain more **file and directory attributes** than are needed on a single-user system. Typically, most system use these concept:
+- File owner (or user): The owner is the user who can change attributes and grant access and who has the most control over the file.
+- Group: Defines a subset of users who can share access to the file
+
+### **Remote file system:**
+- The first implemented method involves manually transferring files between machines via programs like **ftp**
+- The second major method uses **a distributed file system (DFS)** in which remote directories are visible from a local machine.
+- The third method, the **World Wide Web**, is a reversion to the first. 
+  - A browser is needed to gain access to the remote files, and separate operations (essentially a wrapper for **ftp**) are used to transfer files
+- The cloud computing is being used for file sharing as well.
+
+**The client-server model**:
+
+In this case, the machine containing the files is the **server**, and the machine seeking access to the files is the **client**.
+
+**Distributed information systems:**
+
+To make client–server systems easier to manage, **distributed information systems**, also known as **distributed naming services**, provide unified access to the information needed for remote computing
+
+The industry is moving toward use of the **lightweight directory-access protocol (LDAP)** as a secure distributed naming mechanism. 
+
+**Failure modes**:
 
 ## Protection

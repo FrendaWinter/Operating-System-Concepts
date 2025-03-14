@@ -2723,4 +2723,53 @@ The industry is moving toward use of the **lightweight directory-access protocol
 
 **Failure modes**:
 
+Local file systems can fail due to disk failures, metadata corruption, hardware malfunctions, or human errors, often leading to system crashes that require manual recovery.
+
+Remote file systems introduce additional failure modes due to network interruptions, server crashes, or poor hardware configurations. Unlike local file systems, remote file system failures require protocols that either terminate operations or delay them until the server is accessible again.
+
+To handle failures, distributed file systems (DFS) may maintain state information on both the client and server to enable seamless recovery. 
+- The Network File System (NFS) traditionally follows a stateless approach, assuming that each request contains all necessary information, making it simple and resilient but vulnerable to security risks like forged requests. 
+- NFS Version 4 introduces a stateful design to enhance security, performance, and functionality.
+
+## Consistency semantics
+
+**Consistency semantics** represent an important criterion for evaluating any file system that supports file sharing. 
+- These semantics specify how multiple users of a system are to access a shared file simultaneously.
+  - In particular, they specify when modifications of data by one user will be observable by other users. 
+- These semantics are typically implemented as code with the file system.
+
+The series of accesses between the `open()` and `close()` operations makes up a **file session.**
+
+**UNIX semantics**:
+- Writes to an open file by a user are visible immediately to other users who have this file open.
+- One mode of sharing allows users to share the pointer of current location into the file. Thus, the advancing of the pointer by one user affects all sharing users. Here, a file has a single image that interleaves all accesses, regardless of their origin.
+
+**Session Semantics**:
+- Writes to an open file by a user are not visible immediately to other users that have the same file open.
+- Once a file is closed, the changes made to it are visible only in sessions starting later. Already open instances of the file do not reflect these changes.
+
+**Immutable-Shared-Files Semantics**:
+-  Once a file is declared as shared by its creator, it cannot be modified
+
 ## Protection
+
+When information is stored in a computer system, we want to keep it safe from physical damage (the issue of reliability) and improper access (the issue of protection) 
+
+Reliability is generally provided by duplicate copies of file
+
+For improper access, we discuss in below
+
+### Access control
+
+The most general scheme to implement identity dependent access is to associate with each file and directory an **access-control list (ACL)** specifying user names and the types of access allowed for each user.
+
+- **Owner**. The user who created the file is the owner.
+- **Group**. A set of users who are sharing the file and need similar access is a group, or work group. 
+- **Universe**. All other users in the system constitute the universe.
+ 
+Windows users typically manage access-control lists via the GUI
+
+**Other Protection Approaches**:
+
+- Associate a password with each file.
+- In a multilevel directory structure, we need to provide a mechanism for directory protection

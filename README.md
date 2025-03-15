@@ -2773,3 +2773,147 @@ Windows users typically manage access-control lists via the GUI
 
 - Associate a password with each file.
 - In a multilevel directory structure, we need to provide a mechanism for directory protection
+
+# Chapter 12
+
+## File system structure
+
+Disks are the primary form of secondary storage for file systems due to their ability to rewrite data in place and access any block directly. I/O transfers between memory and disk occur in blocks, typically 512 bytes in size.
+
+File systems are designed to store, locate, and retrieve data efficiently. They involve two key challenges: defining how files appear to users (including attributes, operations, and directory structures) and implementing algorithms to map logical files onto physical storage.
+
+A **layered design** is commonly used, where each level builds on lower-level functions. The I/O control layer consists of device drivers and interrupt handlers that translate high-level commands into hardware-specific instructions. The basic file system layer interacts with device drivers to read and write disk blocks, identified by numeric disk addresses. It also manages memory buffers and caches to optimize performance.
+
+![File system layer](./Assets/image_75.png)
+
+The file-system structure consists of multiple layers to efficiently manage storage, retrieval, and metadata.
+
+- **Buffering and Caching**: Buffers hold data during I/O transfers, while caches store frequently used metadata to enhance performance.
+- **File-Organization Module**: This layer handles logical-to-physical block address translation and includes a free-space manager to track and allocate unoccupied blocks.
+- **Logical File System**: It manages metadata (e.g., ownership, permissions, and locations), directory structures, and file control blocks (FCBs or inodes in UNIX). It also ensures file protection.
+
+A layered structure reduces code duplication but may introduce performance overhead. Each OS supports multiple file systems:
+
+- UNIX: UFS (based on Berkeley FFS)
+- Windows: FAT, FAT32, NTFS, and CD/DVD formats
+- Linux: Ext3, Ext4, and support for over 40 file systems
+- Distributed File Systems allow network-based file access.
+
+Research continues, with notable innovations such as Google’s proprietary file system for large-scale distributed storage and FUSE, which enables user-level file system development.
+
+## File system implementation
+
+A file system relies on both **on-disk** and **in-memory** structures to manage files efficiently.
+
+**On-Disk Structures (Persistent Storage)**
+
+These structures are stored on the disk itself and help maintain file organization and metadata across system reboots. These structure include:
+- A **boot control block (per volume)** can contain information needed by thesystem to boot an operating system from that volume. (maybe empty if not contain OS)
+  - In **UFS**, this call **boot block.**
+  - In NTFS, it is the **partition boot sector.**
+- A **volume control block** (per volume) contains volume (or partition) details, such as the number of blocks in the partition, the size of the blocks, a free-block count and free-block pointers, and a free-FCB count and FCB pointers.
+- A **directory structure (per file system)** is used to organize the files.
+  - In UFS, this includes file names and associated **inode** numbers.
+  - In NTFS, it is stored in the **master file table**.
+- A **per-file FCB** contains many details about the file. It has a unique identifier number to allow association with a directory entry.
+
+**In-Memory Structures (Temporary Storage)**
+
+These structures are maintained in RAM to improve file system performance by reducing disk access time. The data are loaded at mount time, updated during file-system operations, and discarded at dismount. Include:
+- **An in-memory mount table** contains information about each mounted volume.
+- An **in-memory directory-structure** cache holds the directory information of recently accessed directories.
+- The **system-wide open-file table** contains a copy of the FCB of each open file, as well as other information.
+- The **per-process open-file table** contains a pointer to the appropriate entry in the **system-wide open-file table**, as well as other information.
+- **Buffers** hold file-system blocks when they are being read from disk or written to disk.
+
+
+### **Summary of File System Operations**  
+
+When a file is created, the **logical file system** allocates a **file control block (FCB)**, updates the directory, and writes the changes to disk. Different operating systems handle directories differently—**UNIX treats directories as files**, while **Windows separates files and directories**.  
+
+To open a file, the system first checks the **system-wide open-file table** to determine if the file is already open. If so, a **per-process open-file table** entry is created, pointing to the existing entry. Otherwise, the directory is searched, the **FCB is loaded into memory**, and an entry is added to both tables. The **per-process table** includes:  
+- A pointer to the system-wide table entry  
+- The file's **current position** (for reading/writing)  
+- The **access mode** (read, write, etc.)  
+
+The `open()` call returns a reference to the per-process entry, which is used for all file operations. **UNIX calls this a file descriptor, while Windows calls it a file handle.**  
+
+File sharing is managed through **open-file tables**. The system-wide table maintains an **open count** for each file, tracking how many processes are using it. When a process closes the file, the count is decremented. When it reaches zero, metadata updates are written back to disk, and the entry is removed.  
+
+Some systems, such as **UFS**, use the file system to manage other system aspects like networking and device access. In these cases, the **system-wide open-file table** holds information for **both files and network connections**.  
+
+**Caching plays a crucial role** in file system efficiency. Most systems keep file metadata in memory, reducing disk access. **BSD UNIX**, for example, achieves an **85% cache hit rate**, significantly improving performance.
+
+![In memory file system](./Assets/image_76.png)
+
+### Partitions and Mounting
+
+Each partition can be either **“raw,”** containing no file system, or **“cooked,”** containing a file system
+
+- The **bootloader (GRUB, Syslinux, etc.)** is responsible for locating and loading the OS kernel into memory.  
+- Once the **kernel is loaded**, it initializes hardware and memory management.  
+- The kernel then **mounts the root filesystem (root partition) in read-only mode** using the disk drivers and file system drivers.  
+- After mounting the root partition, the kernel starts **init** 
+
+The **root partition**, which contains the operating-system kernel and sometimes other system files, is mounted at boot time.
+- **Windows** systems mount each volume in a separate name space, denoted by a letter and a colon. (like: `F:`)
+- On **UNIX** , file systems can be mounted at any directory. **Mounting** is implemented by setting a **flag** in the in-memory copy of the inode for that directory
+  - **flag** indicate directory is a **mount point**.
+  - Directory point to **entry of monut table**
+  - The **mount table entry** contains a pointer to the **superblock** of the file system on that device.
+
+### Virtual file system
+
+How does an operating system allow multiple types of file systems to be integrated into a directory structure?
+
+## Directory implementation
+
+**Linear List**:
+
+**Hash Table**
+
+## Allocation methods
+
+**Contiguous Allocation**
+
+**Linked Allocation**
+
+**Indexed Allocation**
+
+**Performance**
+
+## Free space management
+
+**Bit Vector**
+
+**Linked List**
+
+**Grouping**
+
+**Counting**
+
+**Space map**
+
+## Efficiency and Performance
+
+**Efficiency**
+
+**Performance**
+
+## Recovery
+
+**Consistency Checking**
+
+**Log-Structured File Systems**
+
+**Other Solutions**
+
+**Backup and Restore**
+
+## NFS
+
+**Overview**
+
+**NFS** views a set of interconnected workstations as a set of independent machines with independent file systems
+
+## Example: The WAFL File System
